@@ -1,0 +1,245 @@
+import express, { type Express } from "express";
+import cors from "cors";
+import pinoHttp from "pino-http";
+import cookieParser from "cookie-parser";
+import session from "express-session";
+import { clerkMiddleware } from "@clerk/express";
+import { CLERK_PROXY_PATH, clerkProxyMiddleware } from "./middlewares/clerkProxyMiddleware";
+import router from "./routes";
+import healthRouter from "./routes/health";
+import { logger } from "./lib/logger";
+import { runStartupMigrations } from "./lib/startupMigrations";
+
+// Auto-aplica migraciones en cada cold start (idempotente). Disparamos
+// la promesa aquí para que arranque junto con el boot de Express; abajo
+// hay un middleware que la espera (con timeout corto) antes de que el
+// router toque la DB. El startup completo está pensado para no exceder
+// el cold-start de Vercel.
+//
+// Por qué importa el await: sin él (fire-and-forget puro), la primera
+// request del cold-start entraba mientras la migración seguía corriendo,
+// alcanzaba un SELECT que mencionaba una columna nueva y respondía 500.
+// Eso reventó el módulo de asistencia el día que se mergeó: los SELECTs
+// pedían `pin_must_change` antes de que el ALTER terminara.
+const migrationPromise = runStartupMigrations();
+migrationPromise.catch(() => {}); // evita unhandled-rejection en arranque
+
+const app: Express = express();
+
+// Hardening: support multiple env key names across old/new deploys.
+// Clerk Express middleware requires CLERK_PUBLISHABLE_KEY server-side.
+const resolvedPublishableKey =
+  process.env["CLERK_PUBLISHABLE_KEY"] ||
+  process.env["VITE_CLERK_PUBLISHABLE_KEY"] ||
+  process.env["NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY"] ||
+  "";
+if (!process.env["CLERK_PUBLISHABLE_KEY"] && resolvedPublishableKey) {
+  process.env["CLERK_PUBLISHABLE_KEY"] = resolvedPublishableKey;
+}
+
+app.use(
+  pinoHttp({
+    logger,
+    serializers: {
+      req(req) {
+        return {
+          id: req.id,
+          method: req.method,
+          url: req.url?.split("?")[0],
+        };
+      },
+      res(res) {
+        return {
+          statusCode: res.statusCode,
+        };
+      },
+    },
+  }),
+);
+
+app.use(CLERK_PROXY_PATH, clerkProxyMiddleware());
+
+// Health check mounted before Clerk middleware so it works in production
+// even when Clerk keys are not yet configured. Importante: el healthz
+// queda FUERA del gate de migración para que Vercel siga viendo la
+// función viva aunque la migración tarde / falle.
+app.use("/api", healthRouter);
+
+// Gate de migración: cualquier request que vaya al router principal espera
+// hasta `MIGRATION_GATE_TIMEOUT_MS` a que la promesa de `runStartupMigrations`
+// resuelva. Si ya está resuelta (cold start ya estabilizado), pasa instantáneo.
+// Si tarda más del timeout, pasa igual — preferimos degradado a un cold-start
+// que muere por exceso de tiempo. El timeout es corto a propósito.
+const MIGRATION_GATE_TIMEOUT_MS = 4000;
+app.use((_req, _res, next) => {
+  Promise.race([
+    migrationPromise.catch(() => undefined),
+    new Promise<void>((resolve) => setTimeout(resolve, MIGRATION_GATE_TIMEOUT_MS)),
+  ]).then(() => next());
+});
+
+// Public invite redirect — MUST be before any auth middleware.
+// Returns inline HTML that nukes service workers + caches, stores the
+// code in localStorage, then hard-redirects to the signup page. This
+// guarantees the user lands on a fresh, working version of the app.
+app.get("/api/invite/:code", (req, res) => {
+  const code = String(req.params["code"] || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+  const frontendBase = String(process.env["FRONTEND_PUBLIC_URL"] || "").replace(/\/+$/, "");
+  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  res.send(`<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><title>Castores Control</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<style>
+body{margin:0;background:linear-gradient(135deg,#1a1612,#2d2419,#1a1612);color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px}
+.b{display:flex;flex-direction:column;align-items:center;gap:18px}
+.s{width:48px;height:48px;border:4px solid rgba(200,149,42,0.2);border-top-color:#C8952A;border-radius:50%;animation:r 1s linear infinite}
+@keyframes r{to{transform:rotate(360deg)}}
+p{color:rgba(255,255,255,0.55);font-weight:600;margin:0}
+</style></head><body><div class="b"><div class="s"></div><p>Verificando tu invitación...</p></div>
+<script>(function(){
+  var code=${JSON.stringify(code)};
+  var frontendBase=${JSON.stringify(frontendBase)};
+  try{localStorage.setItem("castores_invite_code",code);localStorage.setItem("castores_invite_pending",String(Date.now()));}catch(e){}
+  function go(){
+    var url = (frontendBase ? frontendBase : "") + "/?code=" + code + "&_t=" + Date.now();
+    location.replace(url);
+  }
+  var p=[];
+  if('serviceWorker' in navigator){p.push(navigator.serviceWorker.getRegistrations().then(function(rs){return Promise.all(rs.map(function(r){return r.unregister();}));}).catch(function(){}));}
+  if('caches' in window){p.push(caches.keys().then(function(ks){return Promise.all(ks.map(function(k){return caches.delete(k);}));}).catch(function(){}));}
+  Promise.all(p).then(function(){setTimeout(go,300);}).catch(go);
+  setTimeout(go,1800);
+})();</script></body></html>`);
+});
+
+// CORS: in production we deploy the API and the web on different Vercel
+// projects (different origins). The browser will only send cookies and
+// Authorization headers cross-origin if we explicitly allow the requesting
+// origin AND set credentials: true. We accept any origin from the configured
+// list (FRONTEND_PUBLIC_URL + ALLOWED_ORIGINS) plus any *.vercel.app preview
+// deploy in non-production to make smoke tests trivial.
+const allowedOrigins = (() => {
+  const list: string[] = [];
+  const primary = process.env["FRONTEND_PUBLIC_URL"];
+  if (primary) list.push(primary.replace(/\/+$/, ""));
+  const extra = process.env["ALLOWED_ORIGINS"];
+  if (extra) {
+    extra
+      .split(",")
+      .map((o) => o.trim().replace(/\/+$/, ""))
+      .filter(Boolean)
+      .forEach((o) => list.push(o));
+  }
+  return list;
+})();
+
+app.use(
+  cors({
+    credentials: true,
+    origin(origin, callback) {
+      // Same-origin / curl / server-to-server (no Origin header) are always allowed.
+      if (!origin) return callback(null, true);
+      const normalized = origin.replace(/\/+$/, "");
+      if (allowedOrigins.includes(normalized)) return callback(null, true);
+      // Always allow the production domain (with or without www).
+      if (/^https?:\/\/(www\.)?castores\.info$/i.test(normalized)) return callback(null, true);
+      // Allow any *.vercel.app preview deploy (staging, PRs, smoke tests).
+      if (/^https?:\/\/[^/]+\.vercel\.app$/i.test(normalized)) return callback(null, true);
+      // Allow localhost during dev regardless of NODE_ENV (Vite preview, etc.).
+      if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(normalized)) {
+        return callback(null, true);
+      }
+      return callback(new Error(`CORS: origin ${origin} not allowed`));
+    },
+  }),
+);
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+// SESSION_SECRET is required in production for stable sessions. If it's
+// missing we fall back to a process-lifetime random string and log loudly,
+// so the API still boots (a hard crash here would render the whole web app
+// blank instead of just degrading auth).
+const sessionSecret = process.env["SESSION_SECRET"];
+const isProduction = process.env["NODE_ENV"] === "production";
+let resolvedSessionSecret = sessionSecret || "";
+if (!resolvedSessionSecret) {
+  if (isProduction) {
+    logger.error(
+      "SESSION_SECRET missing in production; using ephemeral random secret. Sessions will not survive cold starts. Set SESSION_SECRET in Vercel environment variables.",
+    );
+    resolvedSessionSecret =
+      Math.random().toString(36).slice(2) +
+      Math.random().toString(36).slice(2) +
+      Date.now().toString(36);
+  } else {
+    resolvedSessionSecret = "castores-dev-session-secret-not-for-production";
+  }
+}
+
+app.use(
+  session({
+    name: "castores.sid",
+    secret: resolvedSessionSecret,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      // In production we run web and API on different domains so the cookie
+      // must be SameSite=None + Secure to survive the cross-site request.
+      // In dev we keep Lax so it works on plain http://localhost.
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    },
+  }),
+);
+
+const clerk = clerkMiddleware();
+app.use((req, res, next) => {
+  const rawPath = req.path || "/";
+  // Vercel rewrites can hit this function with and without "/api" prefix.
+  const path = rawPath.startsWith("/api/") ? rawPath.slice(4) : rawPath;
+  const method = req.method?.toUpperCase() || "GET";
+  const isPublicCatalogRead =
+    path === "/content" && (method === "GET" || method === "HEAD");
+  const isPublicPath =
+    path === "/healthz" ||
+    path.startsWith("/invite/") ||
+    path === "/invitations/validate" ||
+    isPublicCatalogRead;
+  if (isPublicPath) return next();
+  // Intercept Clerk middleware errors (e.g. missing CLERK_SECRET_KEY,
+  // JWT parsing failure) so they return a readable 503 instead of
+  // propagating to the generic "internal_error" global handler.
+  return clerk(req, res, (err?: unknown) => {
+    if (err) {
+      const detail = err instanceof Error ? err.message : String(err);
+      logger.error({ path, detail }, "Clerk middleware error");
+      res.status(503).json({ error: "auth_unavailable", detail });
+      return;
+    }
+    return next();
+  });
+});
+
+app.use("/api", router);
+
+// Final safety net: always return structured JSON on unhandled runtime errors.
+app.use((err: unknown, req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  const path = req.originalUrl || req.url || "unknown";
+  const detail = err instanceof Error ? err.message : String(err);
+  logger.error({ path, detail }, "Unhandled API error");
+  res.status(500).json({
+    ok: false,
+    error: "internal_error",
+    detail,
+    path,
+  });
+});
+
+export default app;

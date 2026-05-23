@@ -1,0 +1,427 @@
+import { Router, type IRouter } from "express";
+import { eq, sql, and, inArray, or } from "drizzle-orm";
+import { z } from "zod/v4";
+import { db, projectsTable, usersTable, workLogsTable, materialsTable, projectAssignmentsTable, documentsTable, reportsTable } from "@workspace/db";
+import { getRequestUser, getRequestUserStrict } from "../lib/getRequestUser";
+import { getAccessibleProjectIds, canAccessProject } from "../lib/projectAccess";
+import { hasPermission } from "../lib/permissions";
+import { isAdmin, logAdminOverride } from "../lib/adminOverride";
+import { formatZodError } from "../lib/zodError";
+import {
+  CreateProjectBody,
+  UpdateProjectBody,
+  GetProjectParams,
+  UpdateProjectParams,
+  DeleteProjectParams,
+  ListProjectsQueryParams,
+  GetProjectProgressParams,
+} from "@workspace/api-zod";
+
+// Campos que el schema generado de OpenAPI (UpdateProjectBody) no incluye
+// y que la UI ya manda: lat/lng/milestones/galleryImages estaban siendo
+// silenciosamente descartados al hacer PATCH /projects/:id. Aquí los
+// volvemos a aceptar y agregamos los del módulo de asistencia (geofence).
+const PatchProjectExtras = z.object({
+  latitude: z.number().nullable().optional(),
+  longitude: z.number().nullable().optional(),
+  milestones: z.array(z.any()).optional(),
+  galleryImages: z.array(z.string()).optional(),
+  geofenceRadiusMeters: z.number().int().min(10).max(5000).optional(),
+  geofenceMode: z.enum(["strict", "tolerant", "off"]).optional(),
+}).passthrough();
+
+const router: IRouter = Router();
+
+async function enrichProject(project: typeof projectsTable.$inferSelect) {
+  const [client] = project.clientId
+    ? await db.select({ name: usersTable.name }).from(usersTable).where(eq(usersTable.id, project.clientId))
+    : [null];
+  const [supervisor] = project.supervisorId
+    ? await db.select({ name: usersTable.name }).from(usersTable).where(eq(usersTable.id, project.supervisorId))
+    : [null];
+
+  return {
+    ...project,
+    clientName: client?.name ?? null,
+    supervisorName: supervisor?.name ?? null,
+  };
+}
+
+router.get("/projects", async (req, res): Promise<void> => {
+  const user = await getRequestUser(req);
+  if (!user) { res.status(401).json({ error: "No autenticado" }); return; }
+
+  const parsed = ListProjectsQueryParams.safeParse(req.query);
+  let projects = await db.select().from(projectsTable).orderBy(projectsTable.createdAt);
+
+  const accessibleIds = await getAccessibleProjectIds(user);
+  if (accessibleIds !== null) {
+    if (accessibleIds.length === 0) { res.json([]); return; }
+    projects = projects.filter((p) => accessibleIds.includes(p.id));
+  }
+
+  if (parsed.success) {
+    if (parsed.data.status) projects = projects.filter((p) => p.status === parsed.data.status);
+    if (parsed.data.clientId) projects = projects.filter((p) => p.clientId === parsed.data.clientId);
+  }
+
+  const enriched = await Promise.all(projects.map(enrichProject));
+
+  // Overlay effective spentAmount: use the stored value only when manually set
+  // (> 0); otherwise sum approved+delivered material costs so the budget chart
+  // always shows real numbers even when spentAmount was never written back.
+  const pIds = enriched.map((p) => p.id);
+  const approvedMats = pIds.length > 0
+    ? await db
+        .select({
+          projectId: materialsTable.projectId,
+          totalCost: materialsTable.totalCost,
+          costPerUnit: materialsTable.costPerUnit,
+          quantityRequested: materialsTable.quantityRequested,
+        })
+        .from(materialsTable)
+        .where(and(
+          inArray(materialsTable.projectId, pIds),
+          or(eq(materialsTable.status, "approved"), eq(materialsTable.status, "delivered")),
+        ))
+    : [];
+  const matSpentMap = new Map<number, number>();
+  for (const m of approvedMats) {
+    const prev = matSpentMap.get(m.projectId) ?? 0;
+    matSpentMap.set(m.projectId, prev + (m.totalCost ?? (m.costPerUnit ?? 0) * m.quantityRequested));
+  }
+
+  res.json(enriched.map((p) => ({
+    ...p,
+    spentAmount: (p.spentAmount && p.spentAmount > 0) ? p.spentAmount : (matSpentMap.get(p.id) ?? 0),
+  })));
+});
+
+router.post("/projects", async (req, res): Promise<void> => {
+  const user = await getRequestUserStrict(req);
+  if (!user) { res.status(401).json({ error: "No autenticado" }); return; }
+  if (!await hasPermission(user.role, "projectsCreateEdit")) {
+    res.status(403).json({ error: "No tienes permiso para crear obras" });
+    return;
+  }
+
+  const parsed = CreateProjectBody.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ error: formatZodError(parsed.error) });
+    return;
+  }
+
+  const [project] = await db.insert(projectsTable).values(parsed.data).returning();
+  res.status(201).json(await enrichProject(project));
+});
+
+router.get("/projects/:id", async (req, res): Promise<void> => {
+  const params = GetProjectParams.safeParse(req.params);
+  if (!params.success) {
+    res.status(400).json({ error: params.error.message });
+    return;
+  }
+
+  const user = await getRequestUser(req);
+  if (!user) { res.status(401).json({ error: "No autenticado" }); return; }
+  if (!(await canAccessProject(user, params.data.id))) {
+    res.status(403).json({ error: "No tienes acceso a esta obra" });
+    return;
+  }
+
+  const [project] = await db.select().from(projectsTable).where(eq(projectsTable.id, params.data.id));
+  if (!project) {
+    res.status(404).json({ error: "Proyecto no encontrado" });
+    return;
+  }
+
+  res.json(await enrichProject(project));
+});
+
+// ─── Project Assignments (admin-only) ───────────────────────────────────────
+router.get("/projects/:id/assignments", async (req, res): Promise<void> => {
+  const projectId = Number(req.params.id);
+  if (!Number.isInteger(projectId) || projectId <= 0) {
+    res.status(400).json({ error: "ID inválido" }); return;
+  }
+
+  const user = await getRequestUserStrict(req);
+  if (!user) { res.status(401).json({ error: "No autenticado" }); return; }
+  if (!await hasPermission(user.role, "workersManage")) {
+    res.status(403).json({ error: "No tienes permiso para ver asignaciones" }); return;
+  }
+  if (!(await canAccessProject(user, projectId))) {
+    res.status(403).json({ error: "No tienes acceso a esta obra" }); return;
+  }
+
+  const rows = await db
+    .select({
+      id: projectAssignmentsTable.id,
+      userId: projectAssignmentsTable.userId,
+      createdAt: projectAssignmentsTable.createdAt,
+      name: usersTable.name,
+      email: usersTable.email,
+      role: usersTable.role,
+    })
+    .from(projectAssignmentsTable)
+    .leftJoin(usersTable, eq(projectAssignmentsTable.userId, usersTable.id))
+    .where(eq(projectAssignmentsTable.projectId, projectId));
+
+  res.json(rows);
+});
+
+router.post("/projects/:id/assignments", async (req, res): Promise<void> => {
+  const projectId = Number(req.params.id);
+  if (!Number.isInteger(projectId) || projectId <= 0) {
+    res.status(400).json({ error: "ID inválido" }); return;
+  }
+
+  const user = await getRequestUserStrict(req);
+  if (!user) { res.status(401).json({ error: "No autenticado" }); return; }
+  if (!await hasPermission(user.role, "workersManage")) {
+    res.status(403).json({ error: "No tienes permiso para asignar usuarios" }); return;
+  }
+  if (!(await canAccessProject(user, projectId))) {
+    res.status(403).json({ error: "No tienes acceso a esta obra" }); return;
+  }
+
+  const userId = Number((req.body as { userId?: unknown })?.userId);
+  if (!Number.isInteger(userId) || userId <= 0) {
+    res.status(400).json({ error: "userId requerido" }); return;
+  }
+
+  const [target] = await db.select().from(usersTable).where(eq(usersTable.id, userId));
+  if (!target) { res.status(404).json({ error: "Usuario no encontrado" }); return; }
+
+  const [project] = await db.select().from(projectsTable).where(eq(projectsTable.id, projectId));
+  if (!project) { res.status(404).json({ error: "Obra no encontrada" }); return; }
+
+  try {
+    const [created] = await db
+      .insert(projectAssignmentsTable)
+      .values({ projectId, userId, assignedBy: user.id })
+      .returning();
+    res.status(201).json(created);
+  } catch (e: any) {
+    // Postgres unique_violation
+    if (e?.code === "23505" || String(e?.message ?? "").toLowerCase().includes("unique")) {
+      res.status(409).json({ error: "Este usuario ya está asignado a la obra" });
+      return;
+    }
+    throw e;
+  }
+});
+
+router.delete("/projects/:id/assignments/:userId", async (req, res): Promise<void> => {
+  const projectId = Number(req.params.id);
+  const userId = Number(req.params.userId);
+  if (!Number.isInteger(projectId) || projectId <= 0 || !Number.isInteger(userId) || userId <= 0) {
+    res.status(400).json({ error: "ID inválido" }); return;
+  }
+
+  const user = await getRequestUserStrict(req);
+  if (!user) { res.status(401).json({ error: "No autenticado" }); return; }
+  if (!await hasPermission(user.role, "workersManage")) {
+    res.status(403).json({ error: "No tienes permiso para remover asignaciones" }); return;
+  }
+  if (!(await canAccessProject(user, projectId))) {
+    res.status(403).json({ error: "No tienes acceso a esta obra" }); return;
+  }
+
+  await db
+    .delete(projectAssignmentsTable)
+    .where(and(eq(projectAssignmentsTable.projectId, projectId), eq(projectAssignmentsTable.userId, userId)));
+
+  res.sendStatus(204);
+});
+
+router.patch("/projects/:id", async (req, res): Promise<void> => {
+  const user = await getRequestUserStrict(req);
+  if (!user) { res.status(401).json({ error: "No autenticado" }); return; }
+  if (!await hasPermission(user.role, "projectsCreateEdit")) {
+    res.status(403).json({ error: "No tienes permiso para editar obras" });
+    return;
+  }
+
+  const params = UpdateProjectParams.safeParse(req.params);
+  if (!params.success) {
+    res.status(400).json({ error: formatZodError(params.error) });
+    return;
+  }
+
+  if (!(await canAccessProject(user, params.data.id))) {
+    res.status(403).json({ error: "No tienes acceso a esta obra" });
+    return;
+  }
+
+  const parsed = UpdateProjectBody.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ error: formatZodError(parsed.error) });
+    return;
+  }
+  // Segundo parse para campos que el OpenAPI generado no incluye —
+  // ver comentario en `PatchProjectExtras`.
+  const extras = PatchProjectExtras.safeParse(req.body);
+  if (!extras.success) {
+    res.status(400).json({ error: formatZodError(extras.error) });
+    return;
+  }
+
+  const data: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(parsed.data)) {
+    if (v !== null && v !== undefined) data[k] = v;
+  }
+  // Whitelist sólo los keys conocidos de extras para no abrir un agujero
+  // (PatchProjectExtras.passthrough() acepta cualquier key extra para que
+  // zod no falle, pero no queremos que cualquier campo random caiga en la
+  // tabla — solo los que el form admite enviar).
+  const ALLOWED_EXTRAS = [
+    "latitude", "longitude", "milestones", "galleryImages",
+    "geofenceRadiusMeters", "geofenceMode",
+  ] as const;
+  for (const k of ALLOWED_EXTRAS) {
+    const v = (extras.data as Record<string, unknown>)[k];
+    if (v !== undefined) data[k] = v;
+  }
+
+  const [project] = await db
+    .update(projectsTable)
+    .set(data)
+    .where(eq(projectsTable.id, params.data.id))
+    .returning();
+
+  if (!project) {
+    res.status(404).json({ error: "Proyecto no encontrado" });
+    return;
+  }
+
+  res.json(await enrichProject(project));
+});
+
+router.delete("/projects/:id", async (req, res): Promise<void> => {
+  const user = await getRequestUserStrict(req);
+  if (!user) { res.status(401).json({ error: "No autenticado" }); return; }
+  // Eliminar obras es destructivo y arrastra bitácoras + materiales +
+  // documentos + reportes. Lo restringimos a admin (incluso si el rol
+  // tiene projectsCreateEdit, no puede borrar). El admin sí — y queda
+  // grabado en activity_log para que siempre se sepa qué desapareció.
+  if (!isAdmin(user)) {
+    res.status(403).json({ error: "Solo el administrador puede eliminar obras" });
+    return;
+  }
+
+  const params = DeleteProjectParams.safeParse(req.params);
+  if (!params.success) {
+    res.status(400).json({ error: formatZodError(params.error) });
+    return;
+  }
+
+  const projectId = params.data.id;
+
+  // Snapshot pre-borrado para que el audit log diga qué se llevó por
+  // delante (nombre + conteos).
+  const [existing] = await db.select().from(projectsTable).where(eq(projectsTable.id, projectId));
+  if (!existing) { res.status(404).json({ error: "Obra no encontrada" }); return; }
+
+  const logsCount = (await db.select({ id: workLogsTable.id }).from(workLogsTable).where(eq(workLogsTable.projectId, projectId))).length;
+  const materialsCount = (await db.select({ id: materialsTable.id }).from(materialsTable).where(eq(materialsTable.projectId, projectId))).length;
+  const docsCount = (await db.select({ id: documentsTable.id }).from(documentsTable).where(eq(documentsTable.projectId, projectId))).length;
+
+  // Cleanup explícito antes del DELETE del project para no dejar filas
+  // huérfanas con projectId apuntando a un id que ya no existe.
+  await db.delete(workLogsTable).where(eq(workLogsTable.projectId, projectId));
+  await db.delete(materialsTable).where(eq(materialsTable.projectId, projectId));
+  await db.delete(documentsTable).where(eq(documentsTable.projectId, projectId));
+  await db.delete(reportsTable).where(eq(reportsTable.projectId, projectId));
+  await db.delete(projectAssignmentsTable).where(eq(projectAssignmentsTable.projectId, projectId));
+  await db.delete(projectsTable).where(eq(projectsTable.id, projectId));
+
+  await logAdminOverride({
+    actorId: user.id,
+    action: "project.delete",
+    description: `Admin (usuario #${user.id}) eliminó la obra "${existing.name}" (#${existing.id}) y su contenido: ${logsCount} bitácoras, ${materialsCount} materiales, ${docsCount} documentos`,
+    projectId,
+  });
+
+  res.sendStatus(204);
+});
+
+router.get("/projects/:id/progress", async (req, res): Promise<void> => {
+  const user = await getRequestUser(req);
+  if (!user) { res.status(401).json({ error: "No autenticado" }); return; }
+
+  const params = GetProjectProgressParams.safeParse(req.params);
+  if (!params.success) {
+    res.status(400).json({ error: params.error.message });
+    return;
+  }
+
+  if (!(await canAccessProject(user, params.data.id))) {
+    res.status(403).json({ error: "No tienes acceso a esta obra" });
+    return;
+  }
+
+  const [project] = await db.select().from(projectsTable).where(eq(projectsTable.id, params.data.id));
+  if (!project) {
+    res.status(404).json({ error: "Proyecto no encontrado" });
+    return;
+  }
+
+  const logs = await db.select({ id: workLogsTable.id }).from(workLogsTable).where(eq(workLogsTable.projectId, params.data.id));
+  const materials = await db.select().from(materialsTable).where(eq(materialsTable.projectId, params.data.id));
+  // Costo "comprometido": materiales aprobados (admin ya autorizó el gasto).
+  // Antes contábamos todo, lo que inflaba el "gastado" con pendientes y
+  // rechazados que no representaban dinero real. El campo manual
+  // project.spentAmount queda como override opcional para gastos no
+  // ligados a materiales (mano de obra, fletes, etc.) si llegan a usarse.
+  const approvedMaterialCost = materials
+    .filter((m) => m.status === "approved" || m.status === "delivered")
+    .reduce((sum, m) => sum + (m.totalCost ?? (m.costPerUnit ?? 0) * m.quantityRequested), 0);
+  const pendingMaterialCost = materials
+    .filter((m) => m.status === "pending")
+    .reduce((sum, m) => sum + (m.totalCost ?? (m.costPerUnit ?? 0) * m.quantityRequested), 0);
+  // materialCost se mantiene como el total de todos los materiales por
+  // compatibilidad con consumidores existentes; los nuevos usan
+  // approvedMaterialCost.
+  const materialCost = materials.reduce((sum, m) => sum + (m.totalCost ?? (m.costPerUnit ?? 0) * m.quantityRequested), 0);
+
+  let daysElapsed: number | null = null;
+  let daysRemaining: number | null = null;
+  let budgetUsedPercent: number | null = null;
+
+  if (project.startDate) {
+    const start = new Date(project.startDate);
+    const now = new Date();
+    daysElapsed = Math.max(0, Math.floor((now.getTime() - start.getTime()) / 86400000));
+    if (project.endDate) {
+      const end = new Date(project.endDate);
+      daysRemaining = Math.max(0, Math.floor((end.getTime() - now.getTime()) / 86400000));
+    }
+  }
+
+  if (project.budget && project.budget > 0) {
+    // El "gastado real" para el % usado: si admin no metió un override
+    // en spentAmount, usamos lo aprobado. Si lo metió (>0), se respeta
+    // para que mano de obra y otros gastos también cuenten.
+    const effectiveSpent = (project.spentAmount && project.spentAmount > 0)
+      ? project.spentAmount
+      : approvedMaterialCost;
+    budgetUsedPercent = Math.round((effectiveSpent / project.budget) * 100);
+  }
+
+  res.json({
+    projectId: project.id,
+    progressPercent: project.progressPercent,
+    totalLogs: logs.length,
+    totalMaterials: materials.length,
+    materialCost,
+    approvedMaterialCost,
+    pendingMaterialCost,
+    budget: project.budget ?? null,
+    budgetUsedPercent,
+    daysElapsed,
+    daysRemaining,
+  });
+});
+
+export default router;

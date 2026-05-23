@@ -1,6 +1,7 @@
-api/
-src/
-build.mjs
-tsconfig.json
-node_modules/
-dist/
+# Anclado con / inicial para que sólo aplique a estos paths exactos
+# y no a otros src/ o api/ del monorepo (ej. artifacts/castores-control/src/).
+/artifacts/api-server/src
+/artifacts/api-server/api
+/artifacts/api-server/build.mjs
+/artifacts/api-server/tsconfig.json
+/api

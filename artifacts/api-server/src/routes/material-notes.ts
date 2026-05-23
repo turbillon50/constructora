@@ -484,8 +484,8 @@ router.post("/material-notes/scan", async (req, res): Promise<void> => {
         "Authorization": `Bearer ${apiKey}`,
         // OpenRouter pide HTTP-Referer + X-Title como buena práctica para
         // aparecer correctamente en su dashboard de uso.
-        "HTTP-Referer": "https://castores.info",
-        "X-Title": "Castores Control — Note OCR",
+        "HTTP-Referer": "https://moran.demo",
+        "X-Title": "Morán Control — Note OCR",
       },
       body: JSON.stringify({
         model,

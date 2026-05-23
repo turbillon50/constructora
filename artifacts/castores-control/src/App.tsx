@@ -174,7 +174,7 @@ function SignInPage() {
     <div className="min-h-screen flex items-center justify-center bg-[#f8f4ef] px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-6">
-          <img src={`${basePath}/castores-logo.jpeg`} alt="Castores" className="w-16 h-16 rounded-2xl object-cover shadow mx-auto mb-3" />
+          <img src={`${basePath}/brand-logo.jpeg`} alt="Morán" className="w-16 h-16 rounded-2xl object-cover shadow mx-auto mb-3" />
           <h1 className="text-2xl font-bold text-gray-900">Iniciar sesión</h1>
           <p className="text-sm text-gray-500 mt-1">Entra con el correo y contraseña que creaste al registrarte.</p>
         </div>
@@ -301,7 +301,7 @@ function ForgotPasswordPage() {
     <div className="min-h-screen flex items-center justify-center bg-[#f8f4ef] px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-6">
-          <img src={`${basePath}/castores-logo.jpeg`} alt="Castores" className="w-16 h-16 rounded-2xl object-cover shadow mx-auto mb-3" />
+          <img src={`${basePath}/brand-logo.jpeg`} alt="Morán" className="w-16 h-16 rounded-2xl object-cover shadow mx-auto mb-3" />
           <h1 className="text-2xl font-bold text-gray-900">Restablecer contraseña</h1>
           <p className="text-sm text-gray-500 mt-1">Te enviamos un correo con instrucciones.</p>
         </div>
@@ -397,7 +397,7 @@ function ResetPasswordPage() {
     <div className="min-h-screen flex items-center justify-center bg-[#f8f4ef] px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-6">
-          <img src={`${basePath}/castores-logo.jpeg`} alt="Castores" className="w-16 h-16 rounded-2xl object-cover shadow mx-auto mb-3" />
+          <img src={`${basePath}/brand-logo.jpeg`} alt="Morán" className="w-16 h-16 rounded-2xl object-cover shadow mx-auto mb-3" />
           <h1 className="text-2xl font-bold text-gray-900">Nueva contraseña</h1>
           <p className="text-sm text-gray-500 mt-1">Elige una contraseña que recuerdes (mín. 8 caracteres).</p>
         </div>
@@ -990,7 +990,7 @@ function SignUpPage() {
             <p className="font-semibold text-amber-800 mb-1">¿Qué hacer ahora?</p>
             <ol className="text-amber-700 space-y-1 list-none">
               <li>1. Abre tu app de correo</li>
-              <li>2. Busca el mensaje de Castores</li>
+              <li>2. Busca el mensaje de Morán</li>
               <li>3. Copia el código de 6 dígitos</li>
               <li>4. Regresa aquí e ingrésalo abajo</li>
             </ol>
@@ -1090,10 +1090,10 @@ function SignUpPage() {
           <div className="flex items-center justify-center gap-2.5 mb-8">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden"
               style={{ background: "rgba(200,149,42,0.12)", border: "1px solid rgba(200,149,42,0.25)" }}>
-              <img src={`${basePath}/castores-logo.jpeg`} alt="CASTORES" className="h-8 w-auto object-contain" />
+              <img src={`${basePath}/brand-logo.jpeg`} alt="MORÁN" className="h-8 w-auto object-contain" />
             </div>
             <span className="font-black text-white uppercase tracking-widest text-lg"
-              style={{ fontFamily: "'Bebas Neue', sans-serif" }}>Castores Control</span>
+              style={{ fontFamily: "'Bebas Neue', sans-serif" }}>Morán Control</span>
           </div>
 
           <motion.p
@@ -1113,7 +1113,7 @@ function SignUpPage() {
             className="text-white text-[clamp(2.2rem,7vw,3rem)] leading-[0.95] font-black uppercase tracking-wide text-center mb-4"
             style={{ fontFamily: "'Bebas Neue', sans-serif", textShadow: "0 2px 20px rgba(0,0,0,0.4)" }}
           >
-            Bienvenido a<br />Castores
+            Bienvenido a<br />Morán
           </motion.h1>
 
           <motion.div
@@ -1222,8 +1222,8 @@ function SignUpPage() {
       <div className="flex flex-col items-center px-4 py-8 max-w-sm mx-auto">
 
         {/* Logo + bienvenida */}
-        <img src={`${basePath}/castores-logo.jpeg`} alt="Castores" className="w-16 h-16 rounded-2xl object-cover shadow mb-3" />
-        <h1 className="text-2xl font-bold text-gray-900 text-center">Bienvenido a Castores</h1>
+        <img src={`${basePath}/brand-logo.jpeg`} alt="Morán" className="w-16 h-16 rounded-2xl object-cover shadow mb-3" />
+        <h1 className="text-2xl font-bold text-gray-900 text-center">Bienvenido a Morán</h1>
         <p className="text-sm text-gray-500 text-center mt-1 mb-5">Tu plataforma de gestión de obra</p>
 
         {/* Banner instalar PWA con toggle iOS / Android */}

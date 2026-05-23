@@ -23,10 +23,10 @@ export default function CuentaRechazada() {
   };
 
   const buildMailto = () => {
-    const subject = encodeURIComponent("Solicitud de revisión de acceso — Castores Control");
+    const subject = encodeURIComponent("Solicitud de revisión de acceso — Morán Control");
     const body = encodeURIComponent(
-      `Hola equipo de CASTORES,\n\n` +
-        `Mi solicitud para acceder a Castores Control fue rechazada y me gustaría pedir una revisión.\n\n` +
+      `Hola equipo de MORÁN,\n\n` +
+        `Mi solicitud para acceder a Morán Control fue rechazada y me gustaría pedir una revisión.\n\n` +
         `Datos de mi cuenta:\n` +
         `• Nombre: ${userName || "(escribir)"}\n` +
         `• Correo: ${userEmail || "(escribir)"}\n` +
@@ -109,7 +109,7 @@ export default function CuentaRechazada() {
         </div>
 
         <p className="text-[#1a1612]/20 text-[10px] uppercase tracking-[0.2em] mt-6">
-          © {new Date().getFullYear()} CASTORES Estructuras y Construcciones
+          © {new Date().getFullYear()} Morán
         </p>
       </motion.div>
     </div>

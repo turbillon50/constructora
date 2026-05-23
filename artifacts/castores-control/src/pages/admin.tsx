@@ -152,7 +152,7 @@ function InvitationsTab() {
     // into localStorage — the PWA can't intercept that response, so the
     // invitee always lands on /sign-up?code=… with the splash ready to go.
     const msg = encodeURIComponent(
-      `🏗️ *Castores Control* — Tienes una invitación\n\nRol: *${ROLE_LABELS[inv.role] ?? inv.role}*${inv.label ? `\nPara: ${inv.label}` : ""}\n\n🔑 Tu código de acceso:\n*${inv.code}*\n\n1️⃣ Abre: https://castores.info/api/invite/${inv.code}\n2️⃣ Completa tus datos\n3️⃣ Confirma tu registro\n\nEl código es de un solo uso — no lo compartas.`
+      `🏗️ *Morán Control* — Tienes una invitación\n\nRol: *${ROLE_LABELS[inv.role] ?? inv.role}*${inv.label ? `\nPara: ${inv.label}` : ""}\n\n🔑 Tu código de acceso:\n*${inv.code}*\n\n1️⃣ Abre: https://moran.demo/api/invite/${inv.code}\n2️⃣ Completa tus datos\n3️⃣ Confirma tu registro\n\nEl código es de un solo uso — no lo compartas.`
     );
     window.open(`https://wa.me/?text=${msg}`, "_blank");
   };
@@ -734,7 +734,7 @@ function UsuariosTab() {
 
   const shareResetWhatsApp = (inv: any, userName: string) => {
     const msg = encodeURIComponent(
-      `🏗️ *Castores Control* — Tu acceso fue reiniciado\n\nHola ${userName}, tu cuenta fue restablecida.\n\n🔑 Tu nuevo código de acceso:\n*${inv.code}*\n\n1️⃣ Abre: https://castores.info/api/invite/${inv.code}\n2️⃣ Crea tu nueva contraseña\n3️⃣ Entra al sistema\n\nEl código es de un solo uso.`
+      `🏗️ *Morán Control* — Tu acceso fue reiniciado\n\nHola ${userName}, tu cuenta fue restablecida.\n\n🔑 Tu nuevo código de acceso:\n*${inv.code}*\n\n1️⃣ Abre: https://moran.demo/api/invite/${inv.code}\n2️⃣ Crea tu nueva contraseña\n3️⃣ Entra al sistema\n\nEl código es de un solo uso.`
     );
     window.open(`https://wa.me/?text=${msg}`, "_blank");
   };
@@ -850,7 +850,7 @@ function UsuariosTab() {
             </div>
             <p className="text-xs text-center" style={{ color: "rgba(26,22,18,0.45)" }}>
               El usuario debe abrir:<br />
-              <span className="font-mono text-[10px]">castores.info/api/invite/{resetResult.inv.code}</span>
+              <span className="font-mono text-[10px]">moran.demo/api/invite/{resetResult.inv.code}</span>
             </p>
             <button
               onClick={() => shareResetWhatsApp(resetResult.inv, resetResult.userName)}
@@ -860,7 +860,7 @@ function UsuariosTab() {
             </button>
             <button
               onClick={() => {
-                navigator.clipboard?.writeText(`https://castores.info/api/invite/${resetResult.inv.code}`);
+                navigator.clipboard?.writeText(`https://moran.demo/api/invite/${resetResult.inv.code}`);
                 toast({ title: "Link copiado" });
               }}
               className="w-full py-2.5 rounded-xl font-semibold text-sm"
@@ -1153,7 +1153,7 @@ function ManualTab() {
       color: "#C8952A",
       items: [
         { q: "¿Cómo invito a alguien?", a: "Ve al tab 'Invitaciones', selecciona el rol que le corresponde, escribe su nombre (opcional) y presiona 'Generar clave'. Se crea un código único que puedes copiar o enviar directo por WhatsApp." },
-        { q: "¿Qué es la clave maestra CASTORES?", a: "Es el código maestro de administrador. Solo los dueños del sistema deben conocerla. Con ella, cualquier persona puede registrarse como administrador con acceso inmediato." },
+        { q: "¿Qué es la clave maestra MORÁN?", a: "Es el código maestro de administrador. Solo los dueños del sistema deben conocerla. Con ella, cualquier persona puede registrarse como administrador con acceso inmediato." },
         { q: "¿Qué pasa si alguien se registra sin código?", a: "Su solicitud queda en estado 'Pendiente' y requiere aprobación manual desde la sección de Equipo. El usuario ve una pantalla de espera hasta ser aprobado." },
         { q: "¿Puedo revocar una clave?", a: "Sí. En la lista de claves activas, presiona el botón rojo de basura. El código queda inválido y nadie más puede usarlo, incluso si ya fue compartido." },
         { q: "¿Una clave puede usarse más de una vez?", a: "No. Cada clave es de un solo uso. Una vez que alguien se registra con ella, queda marcada como 'Utilizada' y ya no es válida." },
@@ -1205,7 +1205,7 @@ function ManualTab() {
       title: "Instalación como App",
       color: "#6B7280",
       items: [
-        { q: "¿Se puede instalar en el celular?", a: "Sí, Castores Control es una PWA (Progressive Web App). Cuando entres desde el navegador del celular, aparecerá una opción para 'Agregar a pantalla de inicio'. Funciona como una app nativa." },
+        { q: "¿Se puede instalar en el celular?", a: "Sí, Morán Control es una PWA (Progressive Web App). Cuando entres desde el navegador del celular, aparecerá una opción para 'Agregar a pantalla de inicio'. Funciona como una app nativa." },
         { q: "¿Necesita internet para funcionar?", a: "Necesita conexión para cargar datos en tiempo real. Sin embargo, las pantallas ya visitadas pueden verse brevemente sin conexión gracias al caché del navegador." },
       ],
     },
@@ -1222,7 +1222,7 @@ function ManualTab() {
               Manual de la App
             </h3>
             <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>
-              Guía completa para administradores de Castores Control
+              Guía completa para administradores de Morán Control
             </p>
           </div>
         </div>
@@ -1288,7 +1288,7 @@ function ManualTab() {
           Contactar soporte técnico
         </a>
         <p className="text-[10px] mt-3" style={{ color: "rgba(26,22,18,0.3)" }}>
-          © {new Date().getFullYear()} CASTORES Estructuras y Construcciones
+          © {new Date().getFullYear()} Morán
         </p>
       </div>
     </div>

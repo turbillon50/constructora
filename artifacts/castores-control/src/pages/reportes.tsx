@@ -107,11 +107,11 @@ function PrintView({ data, onClose }: { data: any; onClose: () => void }) {
                 <div>
                   <div className="flex items-center gap-3 mb-3">
                     <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0" style={{ background: "rgba(200,149,42,0.2)", border: "1px solid rgba(200,149,42,0.3)" }}>
-                      <img src="/castores-logo.jpeg" alt="CASTORES" className="w-full h-full object-contain" />
+                      <img src="/brand-logo.jpeg" alt="MORÁN" className="w-full h-full object-contain" />
                     </div>
                     <div>
                       <p className="text-white font-black text-sm" style={{ fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.06em" }}>
-                        CASTORES ESTRUCTURAS Y CONSTRUCCIONES
+                        MORÁN ESTRUCTURAS Y CONSTRUCCIONES
                       </p>
                       <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>Sistema de Control Operacional</p>
                     </div>

@@ -22,9 +22,9 @@ const ROLE_COLORS: Record<string, string> = {
 };
 
 // Master admin phrase. Hard-coded check on the client to short-circuit the
-// "complete profile" UI: when the user types CASTORES we activate them as
+// "complete profile" UI: when the user types MORÁN we activate them as
 // admin directly instead of asking name/company/phone.
-const MASTER_ADMIN_PHRASE = "CASTORES";
+const MASTER_ADMIN_PHRASE = "MORÁN";
 
 type CodeState =
   | { status: "checking" }
@@ -91,7 +91,7 @@ export default function CompleteProfile() {
   }, [clerkLoaded, isSignedIn]);
 
   // Activates the current Clerk-authenticated user as admin general using the
-  // master phrase. This is what makes typing "CASTORES" a one-step action:
+  // master phrase. This is what makes typing "MORÁN" a one-step action:
   // no name/company/phone form, just instant access.
   const activateAdminMaster = async (phrase: string) => {
     try {
@@ -177,7 +177,7 @@ export default function CompleteProfile() {
       return;
     }
 
-    // Master phrase handled here too: if the URL/storage already has CASTORES,
+    // Master phrase handled here too: if the URL/storage already has MORÁN,
     // skip validation and activate admin directly.
     if (code === MASTER_ADMIN_PHRASE && clerkLoaded && isSignedIn) {
       void activateAdminMaster(code);
@@ -402,10 +402,10 @@ export default function CompleteProfile() {
         <div className="flex items-center gap-2.5 mb-8 justify-center">
           <div className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden"
             style={{ background: "rgba(200,149,42,0.12)", border: "1px solid rgba(200,149,42,0.25)" }}>
-            <img src={`${import.meta.env.BASE_URL}castores-logo.jpeg`} alt="CASTORES" className="h-8 w-auto object-contain" />
+            <img src={`${import.meta.env.BASE_URL}brand-logo.jpeg`} alt="MORÁN" className="h-8 w-auto object-contain" />
           </div>
           <span className="font-black text-white uppercase tracking-widest text-lg"
-            style={{ fontFamily: "'Bebas Neue', sans-serif" }}>Castores Control</span>
+            style={{ fontFamily: "'Bebas Neue', sans-serif" }}>Morán Control</span>
         </div>
 
         <div className="rounded-3xl overflow-hidden"

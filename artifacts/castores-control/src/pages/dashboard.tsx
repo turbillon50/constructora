@@ -111,7 +111,7 @@ export default function Dashboard() {
           subtitle={ROLE_SUBTITLES[role]}
           imageUrl={HERO_IMAGES[role]}
           accentColor={roleColor}
-          badge={role === "admin" ? "Sistema Activo · CASTORES CONTROL" : undefined}
+          badge={role === "admin" ? "Sistema Activo · MORÁN CONTROL" : undefined}
         >
           <p className="text-white/40 text-xs font-mono">
             {new Date().toLocaleDateString("es-MX", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}

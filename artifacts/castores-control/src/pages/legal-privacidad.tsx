@@ -4,10 +4,10 @@ import { MainLayout } from "@/components/layout/main-layout";
 import { apiUrl } from "@/lib/api-url";
 import { useLocation } from "wouter";
 
-const FALLBACK_PRIVACY = `CASTORES Estructuras y Construcciones (en adelante, "la Empresa") respeta tu privacidad. Esta política describe cómo recopilamos, usamos y protegemos tu información personal en Castores Control.
+const FALLBACK_PRIVACY = `Morán (en adelante, "la Empresa") respeta tu privacidad. Esta política describe cómo recopilamos, usamos y protegemos tu información personal en Morán Control.
 
 1. RESPONSABLE DEL TRATAMIENTO
-CASTORES Estructuras y Construcciones, con domicilio en México. Contacto: WhatsApp +52 998 429 2748.
+Morán, con domicilio en México. Contacto: WhatsApp +52 998 429 2748.
 
 2. DATOS QUE RECOPILAMOS
 - Identificación: nombre, correo electrónico, teléfono.

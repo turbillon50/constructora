@@ -34,7 +34,7 @@ export default function PendingApproval() {
           </h1>
           <p className="text-[#1a1612]/50 text-sm leading-relaxed mb-6">
             Tu solicitud de acceso fue enviada correctamente. El administrador de
-            <strong className="text-[#C8952A]"> CASTORES</strong> la revisará y recibirás
+            <strong className="text-[#C8952A]"> MORÁN</strong> la revisará y recibirás
             una notificación por email cuando sea aprobada.
           </p>
 
@@ -77,7 +77,7 @@ export default function PendingApproval() {
         </div>
 
         <p className="text-[#1a1612]/20 text-[10px] uppercase tracking-[0.2em] mt-6">
-          © {new Date().getFullYear()} CASTORES Estructuras y Construcciones
+          © {new Date().getFullYear()} Morán
         </p>
       </motion.div>
     </div>

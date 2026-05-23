@@ -86,7 +86,7 @@ export function InstallPrompt() {
             <div className="bg-foreground text-background rounded-2xl shadow-2xl p-4 flex items-center gap-3">
               <div className="w-11 h-11 rounded-xl bg-orange-500 text-white flex items-center justify-center text-xl font-bold flex-shrink-0">↓</div>
               <div className="flex-1 min-w-0">
-                <div className="font-bebas tracking-wide text-lg leading-tight">INSTALAR CASTORES</div>
+                <div className="font-bebas tracking-wide text-lg leading-tight">INSTALAR MORÁN</div>
                 <div className="text-xs opacity-75">Acceso rápido desde tu pantalla de inicio.</div>
               </div>
               <button onClick={install} className="px-3 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold flex-shrink-0">
@@ -120,7 +120,7 @@ export function InstallPrompt() {
               <ol className="space-y-3 text-sm">
                 <li className="flex gap-3"><span className="font-bebas text-orange-600 text-xl">1.</span><span>Toca el botón <b>Compartir</b> <span className="inline-block px-1.5 py-0.5 bg-accent rounded">⎙</span> en la barra inferior de Safari.</span></li>
                 <li className="flex gap-3"><span className="font-bebas text-orange-600 text-xl">2.</span><span>Desliza y selecciona <b>"Agregar a pantalla de inicio"</b>.</span></li>
-                <li className="flex gap-3"><span className="font-bebas text-orange-600 text-xl">3.</span><span>Toca <b>Agregar</b>. ¡Listo! Castores aparecerá como app en tu pantalla.</span></li>
+                <li className="flex gap-3"><span className="font-bebas text-orange-600 text-xl">3.</span><span>Toca <b>Agregar</b>. ¡Listo! Morán aparecerá como app en tu pantalla.</span></li>
               </ol>
               <button onClick={dismiss} className="w-full py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-semibold">
                 Entendido

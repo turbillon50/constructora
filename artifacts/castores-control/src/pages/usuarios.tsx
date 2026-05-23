@@ -177,7 +177,7 @@ export default function Usuarios() {
       <div className="space-y-6 pb-4">
         <PageHero
           title="Equipo de Trabajo"
-          subtitle="Gestión de accesos, roles y aprobaciones del personal de CASTORES"
+          subtitle="Gestión de accesos, roles y aprobaciones del personal de MORÁN"
           imageUrl="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1400&q=80&fit=crop"
           accentColor="#C8952A"
           badge="GESTIÓN DE PERSONAL"

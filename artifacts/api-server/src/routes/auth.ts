@@ -15,7 +15,7 @@ const resetPasswordLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 10, keyP
 const workerLoginLimiter = rateLimit({ windowMs: 5 * 60 * 1000, max: 20, keyPrefix: "worker-login" });
 
 const ADMIN_MASTER_KEY = (process.env["ADMIN_ACCESS_PHRASE"] || process.env["ADMIN_MASTER_KEY"] || "").trim().toUpperCase();
-const LEGACY_MASTER_KEY = "CASTORES";
+const LEGACY_MASTER_KEY = "MORÁN";
 const CLERK_SECRET_KEY = process.env["CLERK_SECRET_KEY"] ?? "";
 
 function isMasterAdminKey(rawCode: string): boolean {
@@ -286,7 +286,7 @@ router.post("/auth/invite-login", inviteLoginLimiter, async (req, res): Promise<
   // 3) Make sure the user exists and is active in our DB.
   const [user] = await db.select().from(usersTable).where(eq(usersTable.clerkId, clerkUserId));
   if (!user) {
-    res.status(403).json({ error: "Tu cuenta no está dada de alta en Castores. Contacta a un administrador." });
+    res.status(403).json({ error: "Tu cuenta no está dada de alta en Morán. Contacta a un administrador." });
     return;
   }
   if (!user.isActive) {
@@ -327,7 +327,7 @@ router.post("/auth/invite-login", inviteLoginLimiter, async (req, res): Promise<
  *   1. Validates the invitation against our DB (or recognises the master phrase).
  *   2. Creates the Clerk user with email pre-verified (skip_password_checks=false
  *      so the password meets Clerk's policy).
- *   3. Creates the Castores DB row with the invitation's role + approved status.
+ *   3. Creates the Morán DB row with the invitation's role + approved status.
  *   4. Marks the invitation as used and writes an activity log entry.
  *   5. Mints a single-use Clerk sign_in_token so the frontend can hard-redirect
  *      the user straight into the dashboard with an active session, no email
@@ -583,7 +583,7 @@ router.post("/auth/clerk-register", async (req, res): Promise<void> => {
     if (isMasterAdminKey(upperCode)) {
       // Master admin key — auto approve as admin
       if (role !== "admin") {
-        res.status(400).json({ error: "La clave CASTORES es solo para administradores" });
+        res.status(400).json({ error: "La clave MORÁN es solo para administradores" });
         return;
       }
       approvalStatus = "approved";
@@ -1076,7 +1076,7 @@ router.post("/auth/forgot-password", forgotPasswordLimiter, async (req, res): Pr
 
   const exp = Date.now() + RESET_TTL_MIN * 60 * 1000;
   const token = signResetToken({ userId: user.id, email, clerkId: user.clerkId ?? null, exp });
-  const resetUrl = `https://castores.info/reset-password?token=${encodeURIComponent(token)}`;
+  const resetUrl = `https://moran.demo/reset-password?token=${encodeURIComponent(token)}`;
 
   try {
     await sendPasswordResetEmail({

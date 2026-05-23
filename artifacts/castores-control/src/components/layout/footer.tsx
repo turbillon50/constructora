@@ -19,7 +19,7 @@ export function LegalFooter() {
         <a href="https://wa.me/529984292748" target="_blank" rel="noopener" className="hover:text-foreground transition">Soporte</a>
       </div>
       <div className="text-center mt-3 text-[10px] tracking-wider uppercase opacity-60">
-        © {new Date().getFullYear()} CASTORES Estructuras y Construcciones
+        © {new Date().getFullYear()} Morán
       </div>
     </footer>
   );

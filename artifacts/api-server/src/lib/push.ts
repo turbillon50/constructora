@@ -9,7 +9,7 @@ import { logger } from "./logger";
 // función serverless se caiga si alguien olvidó setear las keys en Vercel.
 const VAPID_PUBLIC = process.env["VAPID_PUBLIC_KEY"] ?? "";
 const VAPID_PRIVATE = process.env["VAPID_PRIVATE_KEY"] ?? "";
-const VAPID_SUBJECT = process.env["VAPID_SUBJECT"] ?? "mailto:soporte@castores.info";
+const VAPID_SUBJECT = process.env["VAPID_SUBJECT"] ?? "mailto:soporte@moran.demo";
 
 let pushReady = false;
 if (VAPID_PUBLIC && VAPID_PRIVATE) {

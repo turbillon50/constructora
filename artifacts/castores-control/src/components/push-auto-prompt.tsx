@@ -225,7 +225,7 @@ export function PushAutoPrompt() {
 
                 {mode === "ios-pwa" && (
                   <>
-                    <h3 className="text-white font-bold text-base leading-tight">Instala Castores en tu iPhone</h3>
+                    <h3 className="text-white font-bold text-base leading-tight">Instala Morán en tu iPhone</h3>
                     <p className="text-white/65 text-xs mt-1 leading-relaxed">
                       iPhone solo permite avisos al celular si la app está en tu pantalla de inicio.
                       Es rápido:
@@ -233,7 +233,7 @@ export function PushAutoPrompt() {
                     <ol className="text-white/75 text-xs mt-2 space-y-1 list-decimal list-inside">
                       <li>Toca <strong>Compartir</strong> (cuadrado con flecha ↑)</li>
                       <li>Elige <strong>"Añadir a pantalla de inicio"</strong></li>
-                      <li>Abre Castores desde el ícono nuevo</li>
+                      <li>Abre Morán desde el ícono nuevo</li>
                     </ol>
                     <div className="flex gap-2 mt-3">
                       <button
@@ -252,7 +252,7 @@ export function PushAutoPrompt() {
                     <h3 className="text-white font-bold text-base leading-tight">Avisos bloqueados</h3>
                     <p className="text-white/65 text-xs mt-1 leading-relaxed">
                       En su momento bloqueaste las notificaciones. Para activarlas:
-                      ajustes del navegador → busca <strong>Castores</strong> → Permitir notificaciones.
+                      ajustes del navegador → busca <strong>Morán</strong> → Permitir notificaciones.
                     </p>
                     <button
                       onClick={dismiss}

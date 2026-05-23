@@ -13,11 +13,11 @@ type FaqItem = {
 };
 
 const FALLBACK: FaqItem[] = [
-  { id: -1, category: "Uso de la app", title: "¿Qué es Castores Control?", body: "Es la plataforma oficial de gestión de obra de CASTORES Estructuras y Construcciones: bitácoras, materiales, reportes, documentos y notificaciones en un solo lugar." },
+  { id: -1, category: "Uso de la app", title: "¿Qué es Morán Control?", body: "Es la plataforma oficial de gestión de obra de Morán: bitácoras, materiales, reportes, documentos y notificaciones en un solo lugar." },
   { id: -2, category: "Invitaciones", title: "¿Cómo me invitan al sistema?", body: "Recibirás un enlace por WhatsApp con tu código de invitación. Al abrirlo, el código se carga automáticamente en el registro." },
   { id: -3, category: "Cuenta", title: "¿Puedo cambiar mi rol después de registrarme?", body: "El rol lo asigna el administrador. Si necesitas cambiarlo, contáctanos por WhatsApp al +52 998 429 2748." },
   { id: -4, category: "Cuenta", title: "¿Cómo elimino mi cuenta?", body: "Entra a Mi Cuenta → Zona de peligro → Eliminar mi cuenta. Tus datos personales se borran de forma permanente." },
-  { id: -5, category: "Problemas", title: "La app no carga o veo una versión antigua", body: "Cierra la app por completo y vuelve a abrirla. Si persiste, entra desde castores.info para limpiar la caché." },
+  { id: -5, category: "Problemas", title: "La app no carga o veo una versión antigua", body: "Cierra la app por completo y vuelve a abrirla. Si persiste, entra desde moran.demo para limpiar la caché." },
   { id: -6, category: "Soporte", title: "¿Cómo contacto a soporte?", body: "WhatsApp: +52 998 429 2748. Estamos disponibles de lunes a sábado de 8:00 a 19:00." },
 ];
 

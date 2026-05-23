@@ -172,7 +172,7 @@ export default function Login() {
       <div className="relative w-full md:w-[55%] h-[45vh] md:h-screen overflow-hidden shrink-0">
         <img
           src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&q=85&fit=crop&crop=center"
-          alt="Obra de construcción CASTORES"
+          alt="Obra de construcción MORÁN"
           className="absolute inset-0 w-full h-full object-cover"
           style={{ objectPosition: "center 30%" }}
         />
@@ -183,10 +183,10 @@ export default function Login() {
         {/* Logo */}
         <div className="absolute top-5 left-5 flex items-center gap-2.5">
           <div className="w-10 h-10 rounded-xl bg-white/95 shadow-lg flex items-center justify-center overflow-hidden">
-            <img src={`${import.meta.env.BASE_URL}castores-logo.jpeg`} alt="CASTORES" className="h-8 w-auto object-contain" />
+            <img src={`${import.meta.env.BASE_URL}brand-logo.jpeg`} alt="MORÁN" className="h-8 w-auto object-contain" />
           </div>
           <div>
-            <p className="text-white font-bold text-sm leading-tight tracking-wide drop-shadow">CASTORES</p>
+            <p className="text-white font-bold text-sm leading-tight tracking-wide drop-shadow">MORÁN</p>
             <p className="text-white/55 text-[9px] uppercase tracking-widest leading-tight">Estructuras y Construcciones</p>
           </div>
         </div>
@@ -205,7 +205,7 @@ export default function Login() {
               className="text-white text-[clamp(2.8rem,8vw,5rem)] leading-[0.9] font-black uppercase tracking-wide"
               style={{ fontFamily: "'Bebas Neue', sans-serif", textShadow: "0 2px 20px rgba(0,0,0,0.5)" }}
             >
-              Castores<br />Control
+              Morán<br />Control
             </h1>
           </motion.div>
         </div>
@@ -348,7 +348,7 @@ export default function Login() {
           </AnimatePresence>
 
           <p className="text-[#1a1612]/20 text-[10px] tracking-[0.2em] uppercase mt-8">
-            © {new Date().getFullYear()} CASTORES Estructuras y Construcciones
+            © {new Date().getFullYear()} Morán
           </p>
         </motion.div>
       </div>

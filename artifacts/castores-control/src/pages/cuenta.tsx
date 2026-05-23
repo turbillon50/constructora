@@ -233,7 +233,7 @@ function SeguridadSection({ email, userName }: { email: string; userName: string
           <h3 className="font-bebas text-xl tracking-wide">SEGURIDAD</h3>
           <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
             Tu contraseña se guarda <strong>encriptada</strong> con el mismo estándar que usan los bancos
-            (Clerk + bcrypt). Nadie en Castores Control la ve en texto plano — ni siquiera el administrador.
+            (Clerk + bcrypt). Nadie en Morán Control la ve en texto plano — ni siquiera el administrador.
           </p>
         </div>
       </div>

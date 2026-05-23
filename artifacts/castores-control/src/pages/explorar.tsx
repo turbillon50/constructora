@@ -82,10 +82,10 @@ export default function Explorar() {
         <div className="max-w-5xl mx-auto px-5 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-white shadow flex items-center justify-center overflow-hidden">
-              <img src="/castores-logo.jpeg" alt="CASTORES" className="h-6 w-auto object-contain" />
+              <img src="/brand-logo.jpeg" alt="MORÁN" className="h-6 w-auto object-contain" />
             </div>
             <span className="font-black text-[#1a1612] text-sm tracking-wide uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.08em" }}>
-              Castores Control
+              Morán Control
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -199,7 +199,7 @@ export default function Explorar() {
           Solicitar acceso →
         </button>
         <p className="text-[#1a1612]/25 text-[10px] uppercase tracking-[0.2em] mt-8">
-          © {new Date().getFullYear()} CASTORES Estructuras y Construcciones
+          © {new Date().getFullYear()} Morán
         </p>
       </section>
     </div>

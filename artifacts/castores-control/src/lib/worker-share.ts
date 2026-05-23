@@ -22,7 +22,7 @@ export function buildShareLink(c: WorkerCredentials): string {
 }
 
 const WHATSAPP_MESSAGE = (c: WorkerCredentials, link: string): string =>
-  `Hola ${c.name}, te dieron de alta en Castores 👷
+  `Hola ${c.name}, te dieron de alta en Morán 👷
 
 Tu código: ${c.workerCode}
 Tu PIN inicial: ${c.pin}
@@ -82,7 +82,7 @@ export async function downloadCredentialPdf(c: WorkerCredentials): Promise<void>
   pdf.setTextColor(200, 149, 42);
   pdf.setFont("helvetica", "bold");
   pdf.setFontSize(10);
-  pdf.text("CREDENCIAL DE TRABAJADOR — CASTORES", cardX + 5, cardY + 9);
+  pdf.text("CREDENCIAL DE TRABAJADOR — MORÁN", cardX + 5, cardY + 9);
 
   // Nombre
   pdf.setTextColor(26, 22, 18);

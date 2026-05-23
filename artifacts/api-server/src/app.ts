@@ -89,7 +89,7 @@ app.get("/api/invite/:code", (req, res) => {
   res.setHeader("Pragma", "no-cache");
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   res.send(`<!DOCTYPE html>
-<html lang="es"><head><meta charset="utf-8"><title>Castores Control</title>
+<html lang="es"><head><meta charset="utf-8"><title>Morán Control</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
 <style>

@@ -172,10 +172,10 @@ export function PushToggle() {
         <div className="text-sm text-muted-foreground space-y-2">
           <p className="font-medium text-foreground">Para iPhone/iPad necesitamos un paso extra:</p>
           <ol className="list-decimal list-inside space-y-1">
-            <li>Abre Safari y ve a <span className="font-mono">castores.info</span>.</li>
+            <li>Abre Safari y ve a <span className="font-mono">moran.demo</span>.</li>
             <li>Toca el botón <strong>Compartir</strong> (cuadrado con flecha hacia arriba).</li>
             <li>Elige <strong>Añadir a pantalla de inicio</strong>.</li>
-            <li>Abre Castores desde el ícono de la pantalla de inicio.</li>
+            <li>Abre Morán desde el ícono de la pantalla de inicio.</li>
             <li>Vuelve a esta pantalla y activa las notificaciones.</li>
           </ol>
         </div>
@@ -185,7 +185,7 @@ export function PushToggle() {
         <div className="text-sm text-red-700 space-y-1">
           <p className="font-medium">Las notificaciones están bloqueadas.</p>
           <p className="text-muted-foreground">
-            Ve a los ajustes del navegador (o del sistema en iOS), busca <em>Castores</em> y activa las notificaciones.
+            Ve a los ajustes del navegador (o del sistema en iOS), busca <em>Morán</em> y activa las notificaciones.
           </p>
         </div>
       )}

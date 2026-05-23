@@ -1,11 +1,31 @@
 /**
- * Shim de @clerk/react/legacy — usado sólo para useSignUp en App.tsx.
- * En demo mode siempre devuelve un signUp inactivo (sin flujo OTP).
+ * Shim de @clerk/react/legacy para modo demo.
+ * Sólo expone useSignUp con un proxy que cubre cualquier método.
  */
+const noopAsync = async (..._args: unknown[]) => null;
+
+function demoProxy<T extends Record<string, unknown>>(base: T): T {
+  return new Proxy(base, {
+    get(target, prop, receiver) {
+      if (prop in target) return Reflect.get(target, prop, receiver);
+      if (prop === Symbol.iterator || prop === "then" || prop === "constructor") {
+        return undefined;
+      }
+      return noopAsync;
+    },
+  }) as T;
+}
+
 export function useSignUp() {
-  return {
+  return demoProxy({
     isLoaded: true,
-    signUp: { status: null as null | string, emailAddress: "" },
-    setActive: async () => {},
-  };
+    signUp: demoProxy({
+      status: null as null | string,
+      emailAddress: "",
+      create: noopAsync,
+      attemptEmailAddressVerification: noopAsync,
+      prepareEmailAddressVerification: noopAsync,
+    }),
+    setActive: noopAsync,
+  });
 }

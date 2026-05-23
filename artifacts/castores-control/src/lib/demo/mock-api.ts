@@ -9,6 +9,7 @@
  * no-op para que ningún componente truene buscando una respuesta.
  */
 import {
+  DEMO_ACTIVITY,
   DEMO_ADMIN,
   DEMO_CONTENT,
   DEMO_DOCUMENTS,
@@ -18,6 +19,7 @@ import {
   DEMO_PERMISSIONS,
   DEMO_PROJECTS,
   DEMO_USERS,
+  buildDashboardSummary,
 } from "./seed-data";
 
 type Handler = (req: {
@@ -176,8 +178,13 @@ register("GET", "/api/materials/:id", ({ pathParams }) => {
 register("GET", "/api/materials/alerts", () =>
   DEMO_MATERIALS.filter((m) => m.status === "pending").map((m) => ({
     materialId: m.id,
-    severity: "medium",
-    message: `Pendiente: ${m.name} ($${m.totalCost.toLocaleString("es-MX")})`,
+    projectId: m.projectId,
+    projectName: m.projectName,
+    materialName: m.name,
+    alertType: "pending_approval",
+    severity: (m.totalCost ?? 0) > 500000 ? "high" : "medium",
+    message: `Pendiente: ${m.name} ($${(m.totalCost ?? 0).toLocaleString("es-MX")})`,
+    createdAt: m.createdAt,
   })),
 );
 register("GET", "/api/materials/stats", () => {
@@ -247,30 +254,11 @@ register("POST", "/api/reports", ({ body }) => ({
 // ============================================================
 // DASHBOARD
 // ============================================================
-register("GET", "/api/dashboard", () => {
-  const activeProjects = DEMO_PROJECTS.filter((p) => p.status === "active");
-  const totalBudget = DEMO_PROJECTS.reduce((s, p) => s + p.budgetTotal, 0);
-  const spentBudget = DEMO_PROJECTS.reduce((s, p) => s + p.budgetSpent, 0);
-  return {
-    activeProjectsCount: activeProjects.length,
-    completedProjectsCount: DEMO_PROJECTS.filter((p) => p.status === "completed").length,
-    pendingMaterialsCount: DEMO_MATERIALS.filter((m) => m.status === "pending").length,
-    activeUsersCount: DEMO_USERS.filter((u) => u.isActive).length,
-    totalBudget,
-    spentBudget,
-    spentPct: Math.round((spentBudget / totalBudget) * 100),
-    recentLogs: DEMO_LOGS.slice(0, 5),
-    projects: activeProjects,
-  };
-});
-register("GET", "/api/dashboard/summary", () => {
-  const activeProjects = DEMO_PROJECTS.filter((p) => p.status === "active");
-  return {
-    activeProjects: activeProjects.length,
-    totalLogs: DEMO_LOGS.length,
-    pendingApprovals: DEMO_MATERIALS.filter((m) => m.status === "pending").length,
-    unreadNotifications: DEMO_NOTIFICATIONS.filter((n) => !n.isRead).length,
-  };
+register("GET", "/api/dashboard", () => buildDashboardSummary());
+register("GET", "/api/dashboard/summary", () => buildDashboardSummary());
+register("GET", "/api/dashboard/activity", ({ search }) => {
+  const limit = Number(search.get("limit") ?? 20);
+  return DEMO_ACTIVITY.slice(0, limit);
 });
 
 // ============================================================

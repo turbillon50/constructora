@@ -55,7 +55,7 @@ export async function downloadCredentialPdf(c: WorkerCredentials): Promise<void>
   const link = buildShareLink(c);
   const qrDataUrl = await QRCode.toDataURL(link, {
     width: 240, margin: 1, errorCorrectionLevel: "M",
-    color: { dark: "#1a1612", light: "#ffffff" },
+    color: { dark: "#0a0a0a", light: "#ffffff" },
   });
 
   // Hoja carta vertical pero con la tarjeta como bloque grande (más
@@ -118,9 +118,9 @@ export async function downloadCredentialPdf(c: WorkerCredentials): Promise<void>
   pdf.text("Escanea para entrar", cardX + cardW - qrSize - 6, cardY + qrSize + 27, { maxWidth: qrSize });
 
   // Aviso al pie de la tarjeta
-  pdf.setFillColor(255, 251, 235); // amber-50
+  pdf.setFillColor(255, 251, 235); // neutral-50
   pdf.rect(cardX, cardY + cardH - 14, cardW, 14, "F");
-  pdf.setTextColor(146, 64, 14); // amber-800
+  pdf.setTextColor(146, 64, 14); // neutral-900
   pdf.setFontSize(8);
   pdf.setFont("helvetica", "bold");
   pdf.text(

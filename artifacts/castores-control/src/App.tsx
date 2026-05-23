@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/lib/auth";
+import { ThemeProvider } from "@/lib/theme";
+import { I18nProvider } from "@/lib/i18n";
 import { ClerkProvider, SignIn, useUser, useClerk, useAuth as useClerkAuth } from "@clerk/react";
 import { useSignUp } from "@clerk/react/legacy";
 import { useEffect, useLayoutEffect, useRef, useState, lazy, Suspense, type FormEvent } from "react";
@@ -49,9 +51,9 @@ const AsistenciaQr = lazy(() => import("@/pages/asistencia/qr"));
 
 function RouteFallback() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f8f4ef]">
+    <div className="min-h-screen flex items-center justify-center bg-[#fafafa]">
       <div className="flex flex-col items-center gap-3">
-        <div className="w-10 h-10 rounded-full border-2 border-amber-200 border-t-amber-600 animate-spin" />
+        <div className="w-10 h-10 rounded-full border-2 border-neutral-200 border-t-neutral-800 animate-spin" />
         <p className="text-xs text-gray-500 tracking-wider">CARGANDO…</p>
       </div>
     </div>
@@ -125,7 +127,7 @@ function SignInPage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [accountReset, setAccountReset] = useState(false);
-  const inputCls = "w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100 text-gray-900 placeholder-gray-400 transition text-sm";
+  const inputCls = "w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-neutral-700 focus:ring-2 focus:ring-neutral-100 text-gray-900 placeholder-gray-400 transition text-sm";
 
   // If a previous Clerk session is sitting around (user opened /sign-in while
   // already signed in), wipe it before showing the form so the new login
@@ -175,7 +177,7 @@ function SignInPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f8f4ef] px-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#fafafa] px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-6">
           <img src={`${basePath}/brand-logo.jpeg`} alt="Morán" className="w-16 h-16 rounded-2xl object-cover shadow mx-auto mb-3" />
@@ -183,7 +185,7 @@ function SignInPage() {
           <p className="text-sm text-gray-500 mt-1">Entra con el correo y contraseña que creaste al registrarte.</p>
         </div>
         {accountReset ? (
-          <div className="bg-white rounded-2xl shadow-sm border border-amber-200 p-6 space-y-4 text-center">
+          <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6 space-y-4 text-center">
             <div className="text-4xl">🔑</div>
             <h2 className="font-bold text-gray-900 text-base">Tu acceso fue reiniciado</h2>
             <p className="text-sm text-gray-600 leading-relaxed">
@@ -192,7 +194,7 @@ function SignInPage() {
             <button
               type="button"
               onClick={() => { window.location.assign(`${basePath}/sign-up`); }}
-              className="w-full py-3 rounded-xl font-bold text-white bg-amber-600 hover:bg-amber-700 transition text-sm"
+              className="w-full py-3 rounded-xl font-bold text-white bg-neutral-800 hover:bg-neutral-900 transition text-sm"
             >
               Registrarme con mi código de invitación →
             </button>
@@ -234,19 +236,19 @@ function SignInPage() {
                 <button
                   type="button"
                   onClick={() => setLocation("/forgot-password")}
-                  className="block w-full text-center text-xs font-semibold text-amber-700 hover:text-amber-900 underline"
+                  className="block w-full text-center text-xs font-semibold text-neutral-900 hover:text-black underline"
                 >
                   Recupera tu contraseña en 30 segundos →
                 </button>
               </div>
             )}
-            <button type="submit" disabled={busy} className="w-full py-3 rounded-xl font-semibold text-white bg-amber-600 hover:bg-amber-700 transition disabled:opacity-50 text-sm mt-1">
+            <button type="submit" disabled={busy} className="w-full py-3 rounded-xl font-semibold text-white bg-neutral-800 hover:bg-neutral-900 transition disabled:opacity-50 text-sm mt-1">
               {busy ? "Entrando..." : "Iniciar sesión →"}
             </button>
             <button
               type="button"
               onClick={() => setLocation("/forgot-password")}
-              className="block w-full text-center text-xs text-gray-500 hover:text-amber-700 mt-2"
+              className="block w-full text-center text-xs text-gray-500 hover:text-neutral-900 mt-2"
             >
               ¿Olvidaste tu contraseña?
             </button>
@@ -257,7 +259,7 @@ function SignInPage() {
         )}
         <p className="text-center text-sm text-gray-500 mt-4">
           ¿Aún no tienes cuenta?{" "}
-          <button onClick={() => setLocation("/")} className="text-amber-700 font-medium hover:text-amber-900 underline">
+          <button onClick={() => setLocation("/")} className="text-neutral-900 font-medium hover:text-black underline">
             Volver al inicio
           </button>
         </p>
@@ -272,7 +274,7 @@ function ForgotPasswordPage() {
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const inputCls = "w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100 text-gray-900 placeholder-gray-400 transition text-sm";
+  const inputCls = "w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-neutral-700 focus:ring-2 focus:ring-neutral-100 text-gray-900 placeholder-gray-400 transition text-sm";
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -302,7 +304,7 @@ function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f8f4ef] px-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#fafafa] px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-6">
           <img src={`${basePath}/brand-logo.jpeg`} alt="Morán" className="w-16 h-16 rounded-2xl object-cover shadow mx-auto mb-3" />
@@ -316,7 +318,7 @@ function ForgotPasswordPage() {
             </p>
             <button
               onClick={() => setLocation("/sign-in")}
-              className="w-full py-3 rounded-xl font-semibold text-white bg-amber-600 hover:bg-amber-700 transition text-sm"
+              className="w-full py-3 rounded-xl font-semibold text-white bg-neutral-800 hover:bg-neutral-900 transition text-sm"
             >
               Volver a iniciar sesión
             </button>
@@ -337,13 +339,13 @@ function ForgotPasswordPage() {
               className={inputCls}
             />
             {error && <p className="text-sm text-red-600 text-center">{error}</p>}
-            <button type="submit" disabled={busy} className="w-full py-3 rounded-xl font-semibold text-white bg-amber-600 hover:bg-amber-700 transition disabled:opacity-50 text-sm mt-1">
+            <button type="submit" disabled={busy} className="w-full py-3 rounded-xl font-semibold text-white bg-neutral-800 hover:bg-neutral-900 transition disabled:opacity-50 text-sm mt-1">
               {busy ? "Enviando..." : "Enviar enlace"}
             </button>
             <button
               type="button"
               onClick={() => setLocation("/sign-in")}
-              className="block w-full text-center text-xs text-gray-500 hover:text-amber-700"
+              className="block w-full text-center text-xs text-gray-500 hover:text-neutral-900"
             >
               Volver al inicio de sesión
             </button>
@@ -361,7 +363,7 @@ function ResetPasswordPage() {
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const inputCls = "w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100 text-gray-900 placeholder-gray-400 transition text-sm";
+  const inputCls = "w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-neutral-700 focus:ring-2 focus:ring-neutral-100 text-gray-900 placeholder-gray-400 transition text-sm";
 
   const token = (() => {
     if (typeof window === "undefined") return "";
@@ -398,7 +400,7 @@ function ResetPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f8f4ef] px-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#fafafa] px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-6">
           <img src={`${basePath}/brand-logo.jpeg`} alt="Morán" className="w-16 h-16 rounded-2xl object-cover shadow mx-auto mb-3" />
@@ -410,7 +412,7 @@ function ResetPasswordPage() {
             <p className="text-sm text-gray-700">Listo. Tu contraseña fue actualizada.</p>
             <button
               onClick={() => setLocation("/sign-in")}
-              className="w-full py-3 rounded-xl font-semibold text-white bg-amber-600 hover:bg-amber-700 transition text-sm"
+              className="w-full py-3 rounded-xl font-semibold text-white bg-neutral-800 hover:bg-neutral-900 transition text-sm"
             >
               Iniciar sesión →
             </button>
@@ -442,7 +444,7 @@ function ResetPasswordPage() {
               className={inputCls}
             />
             {error && <p className="text-sm text-red-600 text-center">{error}</p>}
-            <button type="submit" disabled={busy} className="w-full py-3 rounded-xl font-semibold text-white bg-amber-600 hover:bg-amber-700 transition disabled:opacity-50 text-sm mt-1">
+            <button type="submit" disabled={busy} className="w-full py-3 rounded-xl font-semibold text-white bg-neutral-800 hover:bg-neutral-900 transition disabled:opacity-50 text-sm mt-1">
               {busy ? "Guardando..." : "Guardar contraseña"}
             </button>
           </form>
@@ -479,31 +481,31 @@ function PwaInstallBanner({ defaultIOS }: { defaultIOS: boolean }) {
   const [tab, setTab] = useState<"ios" | "android">(defaultIOS ? "ios" : "android");
   return (
     <div className="w-full mb-5 rounded-2xl text-sm overflow-hidden"
-      style={{ border: "1px solid rgba(200,149,42,0.30)" }}>
+      style={{ border: "1px solid rgba(10,10,10,0.85)" }}>
       {/* Tabs */}
-      <div className="flex" style={{ background: "rgba(200,149,42,0.08)" }}>
+      <div className="flex" style={{ background: "rgba(10,10,10,0.85)" }}>
         {(["ios", "android"] as const).map(t => (
           <button key={t} onClick={() => setTab(t)}
             className="flex-1 py-2 text-xs font-bold transition-colors"
             style={tab === t
-              ? { background: "#C8952A", color: "#fff" }
+              ? { background: "#0a0a0a", color: "#fff" }
               : { color: "#92400e" }}>
             {t === "ios" ? "🍎 iPhone / iPad" : "🤖 Android"}
           </button>
         ))}
       </div>
       {/* Contenido */}
-      <div className="p-4" style={{ background: "rgba(200,149,42,0.06)" }}>
-        <p className="font-semibold text-amber-800 mb-2">📲 Instala la app en tu teléfono</p>
+      <div className="p-4" style={{ background: "rgba(10,10,10,0.85)" }}>
+        <p className="font-semibold text-neutral-900 mb-2">📲 Instala la app en tu teléfono</p>
         {tab === "ios" ? (
-          <ol className="text-amber-700 space-y-1.5">
+          <ol className="text-neutral-900 space-y-1.5">
             <li>1. Abre esta página en <span className="font-bold">Safari</span></li>
             <li>2. Toca el ícono <span className="font-bold">⬆ Compartir</span> (parte inferior de la pantalla)</li>
             <li>3. Selecciona <span className="font-bold">"Agregar a pantalla de inicio"</span></li>
             <li>4. Toca <span className="font-bold">"Agregar"</span> — ya tienes el ícono en tu inicio</li>
           </ol>
         ) : (
-          <ol className="text-amber-700 space-y-1.5">
+          <ol className="text-neutral-900 space-y-1.5">
             <li>1. Abre esta página en <span className="font-bold">Chrome</span></li>
             <li>2. Toca el menú <span className="font-bold">⋮</span> (esquina superior derecha)</li>
             <li>3. Selecciona <span className="font-bold">"Añadir a pantalla de inicio"</span> o <span className="font-bold">"Instalar app"</span></li>
@@ -930,8 +932,8 @@ function SignUpPage() {
     }
   };
 
-  const inputCls = "w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100 text-gray-900 placeholder-gray-400 transition text-sm";
-  const btnPrimary = "w-full py-3 rounded-xl font-semibold text-white bg-amber-600 hover:bg-amber-700 transition disabled:opacity-50 text-sm";
+  const inputCls = "w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-neutral-700 focus:ring-2 focus:ring-neutral-100 text-gray-900 placeholder-gray-400 transition text-sm";
+  const btnPrimary = "w-full py-3 rounded-xl font-semibold text-white bg-neutral-800 hover:bg-neutral-900 transition disabled:opacity-50 text-sm";
 
   // Show spinner while:
   //   - Clerk is initializing
@@ -943,9 +945,9 @@ function SignUpPage() {
   // isSignedIn becomes false — so the form renders.
   if (!isLoaded || !signUpLoaded || purgingSession || (isSignedIn && handledStaleSessionRef.current === false)) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f8f4ef]">
+      <div className="min-h-screen flex items-center justify-center bg-[#fafafa]">
         <div className="flex flex-col items-center gap-3">
-          <div className="animate-spin rounded-full h-10 w-10 border-4 border-amber-500 border-t-transparent" />
+          <div className="animate-spin rounded-full h-10 w-10 border-4 border-neutral-700 border-t-transparent" />
           {purgingSession && (
             <p className="text-xs text-gray-500">Preparando registro nuevo...</p>
           )}
@@ -958,8 +960,8 @@ function SignUpPage() {
   // not flash.
   if (isSignedIn) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f8f4ef]">
-        <div className="animate-spin rounded-full h-10 w-10 border-4 border-amber-500 border-t-transparent" />
+      <div className="min-h-screen flex items-center justify-center bg-[#fafafa]">
+        <div className="animate-spin rounded-full h-10 w-10 border-4 border-neutral-700 border-t-transparent" />
       </div>
     );
   }
@@ -968,8 +970,8 @@ function SignUpPage() {
   // (prevents flashing the form before the Clerk sync effect redirects to OTP)
   if (step === "otp" && !signUpLoaded) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f8f4ef]">
-        <div className="animate-spin rounded-full h-10 w-10 border-4 border-amber-500 border-t-transparent" />
+      <div className="min-h-screen flex items-center justify-center bg-[#fafafa]">
+        <div className="animate-spin rounded-full h-10 w-10 border-4 border-neutral-700 border-t-transparent" />
       </div>
     );
   }
@@ -977,7 +979,7 @@ function SignUpPage() {
   // ── OTP step ──────────────────────────────────────────────────────────────
   if (step === "otp") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f8f4ef] p-4">
+      <div className="min-h-screen flex items-center justify-center bg-[#fafafa] p-4">
         <div className="w-full max-w-sm">
           <div className="text-center mb-5">
             <div className="text-4xl mb-2">📧</div>
@@ -990,9 +992,9 @@ function SignUpPage() {
 
           {/* Instrucción explícita paso a paso */}
           <div className="rounded-xl p-3 text-sm mb-4"
-            style={{ background: "rgba(200,149,42,0.08)", border: "1px solid rgba(200,149,42,0.25)" }}>
-            <p className="font-semibold text-amber-800 mb-1">¿Qué hacer ahora?</p>
-            <ol className="text-amber-700 space-y-1 list-none">
+            style={{ background: "rgba(10,10,10,0.85)", border: "1px solid rgba(10,10,10,0.85)" }}>
+            <p className="font-semibold text-neutral-900 mb-1">¿Qué hacer ahora?</p>
+            <ol className="text-neutral-900 space-y-1 list-none">
               <li>1. Abre tu app de correo</li>
               <li>2. Busca el mensaje de Morán</li>
               <li>3. Copia el código de 6 dígitos</li>
@@ -1001,7 +1003,7 @@ function SignUpPage() {
           </div>
 
           {!signUp && signUpLoaded && (
-            <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-sm text-amber-800 mb-4">
+            <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-3 text-sm text-neutral-900 mb-4">
               Tu sesión fue interrumpida. El código anterior puede haber expirado — usa el botón "Reenviar código".
             </div>
           )}
@@ -1030,7 +1032,7 @@ function SignUpPage() {
             <button
               onClick={handleResend}
               disabled={resendCooldown > 0}
-              className="text-sm text-amber-700 hover:text-amber-900 font-medium disabled:text-gray-400 disabled:hover:text-gray-400 disabled:cursor-not-allowed"
+              className="text-sm text-neutral-900 hover:text-black font-medium disabled:text-gray-400 disabled:hover:text-gray-400 disabled:cursor-not-allowed"
             >
               {resendCooldown > 0
                 ? `Espera ${resendCooldown}s antes de reenviar`
@@ -1071,9 +1073,9 @@ function SignUpPage() {
   if (splash.status === "loading") {
     return (
       <div className="min-h-screen flex items-center justify-center"
-        style={{ background: "linear-gradient(135deg, #1a1612 0%, #2d2419 60%, #1a1612 100%)" }}>
+        style={{ background: "linear-gradient(135deg, #0a0a0a 0%, #171717 60%, #0a0a0a 100%)" }}>
         <div className="animate-spin rounded-full h-10 w-10 border-4"
-          style={{ borderColor: "rgba(200,149,42,0.2)", borderTopColor: "#C8952A" }} />
+          style={{ borderColor: "rgba(10,10,10,0.85)", borderTopColor: "#0a0a0a" }} />
       </div>
     );
   }
@@ -1083,7 +1085,7 @@ function SignUpPage() {
     const roleIntro = ROLE_INTRO[splash.role] ?? "Vas a poder usar el sistema según tu rol asignado.";
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-5 py-10"
-        style={{ background: "linear-gradient(135deg, #1a1612 0%, #2d2419 60%, #1a1612 100%)" }}>
+        style={{ background: "linear-gradient(135deg, #0a0a0a 0%, #171717 60%, #0a0a0a 100%)" }}>
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -1093,7 +1095,7 @@ function SignUpPage() {
           {/* Logo */}
           <div className="flex items-center justify-center gap-2.5 mb-8">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden"
-              style={{ background: "rgba(200,149,42,0.12)", border: "1px solid rgba(200,149,42,0.25)" }}>
+              style={{ background: "rgba(10,10,10,0.85)", border: "1px solid rgba(10,10,10,0.85)" }}>
               <img src={`${basePath}/brand-logo.jpeg`} alt="MORÁN" className="h-8 w-auto object-contain" />
             </div>
             <span className="font-black text-white uppercase tracking-widest text-lg"
@@ -1125,13 +1127,13 @@ function SignUpPage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.4, duration: 0.4 }}
             className="rounded-2xl p-4 mb-5"
-            style={{ background: "rgba(200,149,42,0.10)", border: "1.5px solid rgba(200,149,42,0.35)" }}
+            style={{ background: "rgba(10,10,10,0.85)", border: "1.5px solid rgba(10,10,10,0.85)" }}
           >
             <div className="flex items-center gap-3">
               <span className="text-3xl">{roleIcon}</span>
               <div className="flex-1">
                 <p className="text-[10px] uppercase tracking-widest font-semibold mb-0.5"
-                  style={{ color: "#C8952A" }}>
+                  style={{ color: "#0a0a0a" }}>
                   Rol asignado
                 </p>
                 <p className="text-white font-bold text-base">{roleLabel}</p>
@@ -1164,9 +1166,9 @@ function SignUpPage() {
             onClick={() => setSplash({ status: "dismissed", code: splash.code, role: splash.role })}
             className="w-full py-3.5 rounded-2xl text-sm font-bold"
             style={{
-              background: "linear-gradient(135deg, #C8952A, #E8A830)",
+              background: "linear-gradient(135deg, #0a0a0a, #E8A830)",
               color: "white",
-              boxShadow: "0 4px 20px rgba(200,149,42,0.35)",
+              boxShadow: "0 4px 20px rgba(10,10,10,0.85)",
             }}
           >
             Continuar con mi registro →
@@ -1188,7 +1190,7 @@ function SignUpPage() {
   if (splash.status === "invalid") {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-5"
-        style={{ background: "linear-gradient(135deg, #1a1612 0%, #2d2419 60%, #1a1612 100%)" }}>
+        style={{ background: "linear-gradient(135deg, #0a0a0a 0%, #171717 60%, #0a0a0a 100%)" }}>
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-sm text-center">
           <div className="text-5xl mb-6">❌</div>
@@ -1197,7 +1199,7 @@ function SignUpPage() {
             Invitación inválida
           </h1>
           <p className="text-sm mb-6 leading-relaxed" style={{ color: "rgba(255,255,255,0.55)" }}>
-            La clave <span className="font-mono text-amber-400 font-bold">{splash.code}</span> no es válida o ya fue utilizada.
+            La clave <span className="font-mono text-neutral-400 font-bold">{splash.code}</span> no es válida o ya fue utilizada.
           </p>
           <p className="text-xs mb-6" style={{ color: "rgba(255,255,255,0.35)" }}>
             Pídele a tu administrador que te genere una nueva clave o que revise el link de invitación.
@@ -1222,7 +1224,7 @@ function SignUpPage() {
   const detectedIOS = typeof window !== "undefined" && /iphone|ipad|ipod/i.test(window.navigator.userAgent);
 
   return (
-    <div className="min-h-screen bg-[#f8f4ef] overflow-y-auto">
+    <div className="min-h-screen bg-[#fafafa] overflow-y-auto">
       <div className="flex flex-col items-center px-4 py-8 max-w-sm mx-auto">
 
         {/* Logo + bienvenida */}
@@ -1245,7 +1247,7 @@ function SignUpPage() {
               <div key={s.n} className="flex items-start gap-3 bg-white rounded-xl px-4 py-3"
                 style={{ border: "1px solid rgba(0,0,0,0.06)" }}>
                 <span className="flex-shrink-0 w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center text-white"
-                  style={{ background: "#C8952A" }}>{s.n}</span>
+                  style={{ background: "#0a0a0a" }}>{s.n}</span>
                 <div>
                   <p className="text-sm font-semibold text-gray-800">{s.title}</p>
                   <p className="text-xs text-gray-500 mt-0.5">{s.desc}</p>
@@ -1316,20 +1318,20 @@ function SignUpPage() {
               type="checkbox"
               checked={acceptTerms}
               onChange={(e) => setAcceptTerms(e.target.checked)}
-              className="mt-0.5 w-4 h-4 rounded border-gray-300 text-amber-600 focus:ring-amber-500"
+              className="mt-0.5 w-4 h-4 rounded border-gray-300 text-neutral-800 focus:ring-neutral-700"
             />
             <span className="text-[11px] leading-snug text-gray-600">
               Acepto los{" "}
-              <a href={`${basePath}/legal/terminos`} target="_blank" rel="noopener noreferrer" className="text-amber-700 underline">Términos de Uso</a>
+              <a href={`${basePath}/legal/terminos`} target="_blank" rel="noopener noreferrer" className="text-neutral-900 underline">Términos de Uso</a>
               {" "}y la{" "}
-              <a href={`${basePath}/legal/privacidad`} target="_blank" rel="noopener noreferrer" className="text-amber-700 underline">Política de Privacidad</a>.
+              <a href={`${basePath}/legal/privacidad`} target="_blank" rel="noopener noreferrer" className="text-neutral-900 underline">Política de Privacidad</a>.
             </span>
           </label>
           {error && (
             <div className="text-sm text-red-600">
               {error}{" "}
               {emailTaken && (
-                <a href={`${basePath}/sign-in`} className="font-semibold underline text-amber-700">
+                <a href={`${basePath}/sign-in`} className="font-semibold underline text-neutral-900">
                   Inicia sesión →
                 </a>
               )}
@@ -1342,7 +1344,7 @@ function SignUpPage() {
 
         <p className="text-center text-sm text-gray-500 mt-4">
           ¿Ya tienes cuenta?{" "}
-          <a href={`${basePath}/sign-in`} className="text-amber-700 font-medium hover:text-amber-900">Inicia sesión</a>
+          <a href={`${basePath}/sign-in`} className="text-neutral-900 font-medium hover:text-black">Inicia sesión</a>
         </p>
       </div>
     </div>
@@ -1499,19 +1501,19 @@ function ApprovalGate({ children }: { children: React.ReactNode }) {
 
   if (status === "loading") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f8f4ef]">
-        <div className="animate-spin rounded-full h-10 w-10 border-4 border-amber-500 border-t-transparent" />
+      <div className="min-h-screen flex items-center justify-center bg-[#fafafa]">
+        <div className="animate-spin rounded-full h-10 w-10 border-4 border-neutral-700 border-t-transparent" />
       </div>
     );
   }
 
   if (status === "error") {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-[#f8f4ef] gap-4 p-6 text-center">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#fafafa] gap-4 p-6 text-center">
         <p className="text-sm text-gray-600">No se pudo verificar tu acceso. Revisa tu conexión e intenta de nuevo.</p>
         <button
           onClick={() => { setStatus("loading"); setRetryTick(t => t + 1); }}
-          className="px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-sm transition"
+          className="px-5 py-2.5 rounded-xl bg-neutral-800 hover:bg-neutral-900 text-white font-semibold text-sm transition"
         >
           Reintentar
         </button>
@@ -1537,8 +1539,8 @@ function ProtectedRoute({ component: Component }: { component: React.ComponentTy
 
   if (!isLoaded || (!isSignedIn && !graceDone)) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f8f4ef]">
-        <div className="animate-spin rounded-full h-10 w-10 border-4 border-amber-500 border-t-transparent" />
+      <div className="min-h-screen flex items-center justify-center bg-[#fafafa]">
+        <div className="animate-spin rounded-full h-10 w-10 border-4 border-neutral-700 border-t-transparent" />
       </div>
     );
   }
@@ -1571,9 +1573,9 @@ function InvitePage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-4"
-      style={{ background: "linear-gradient(135deg, #1a1612 0%, #2d2419 60%, #1a1612 100%)" }}>
+      style={{ background: "linear-gradient(135deg, #0a0a0a 0%, #171717 60%, #0a0a0a 100%)" }}>
       <div className="w-12 h-12 border-4 rounded-full animate-spin"
-        style={{ borderColor: "rgba(200,149,42,0.2)", borderTopColor: "#C8952A" }} />
+        style={{ borderColor: "rgba(10,10,10,0.85)", borderTopColor: "#0a0a0a" }} />
       <p className="text-sm font-semibold" style={{ color: "rgba(255,255,255,0.5)" }}>
         Verificando tu invitación...
       </p>
@@ -1736,17 +1738,21 @@ function ClerkProviderWithRoutes() {
       routerPush={(to) => setLocation(stripBase(to))}
       routerReplace={(to) => setLocation(stripBase(to), { replace: true })}
     >
-      <QueryClientProvider client={queryClient}>
-        <ClerkQueryClientCacheInvalidator />
-        <TooltipProvider>
-          <AuthProvider>
-            <AuthSync />
-            <SignUpGuard />
-            <Router />
-          </AuthProvider>
-          <Toaster />
-        </TooltipProvider>
-      </QueryClientProvider>
+      <ThemeProvider>
+        <I18nProvider>
+          <QueryClientProvider client={queryClient}>
+            <ClerkQueryClientCacheInvalidator />
+            <TooltipProvider>
+              <AuthProvider>
+                <AuthSync />
+                <SignUpGuard />
+                <Router />
+              </AuthProvider>
+              <Toaster />
+            </TooltipProvider>
+          </QueryClientProvider>
+        </I18nProvider>
+      </ThemeProvider>
     </ClerkProvider>
   );
 }
@@ -1754,10 +1760,10 @@ function ClerkProviderWithRoutes() {
 function App() {
   if (!clerkPubKey) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f8f4ef] px-6">
-        <div className="max-w-lg rounded-2xl border border-amber-200 bg-white p-6 text-center">
-          <h1 className="text-xl font-bold text-[#1a1612]">Configuracion pendiente de autenticacion</h1>
-          <p className="mt-2 text-sm text-[#5b5146]">
+      <div className="min-h-screen flex items-center justify-center bg-[#fafafa] px-6">
+        <div className="max-w-lg rounded-2xl border border-neutral-200 bg-white p-6 text-center">
+          <h1 className="text-xl font-bold text-[#0a0a0a]">Configuracion pendiente de autenticacion</h1>
+          <p className="mt-2 text-sm text-[#525252]">
             El demo esta listo para Vercel, pero falta configurar Clerk. Agrega
             `VITE_CLERK_PUBLISHABLE_KEY` en las Environment Variables del proyecto web.
           </p>

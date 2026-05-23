@@ -60,13 +60,13 @@ export default function Cuenta() {
         {/* Perfil */}
         <section className="bg-card border border-border rounded-2xl p-6">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-orange-500 text-white flex items-center justify-center text-2xl font-bebas tracking-wider">
+            <div className="w-16 h-16 rounded-full bg-neutral-700 text-white flex items-center justify-center text-2xl font-bebas tracking-wider">
               {initials}
             </div>
             <div className="flex-1 min-w-0">
               <h2 className="font-bebas text-2xl tracking-wide truncate">{user.name}</h2>
               <p className="text-sm text-muted-foreground truncate">{user.email}</p>
-              <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-orange-100 text-orange-700 text-xs font-semibold uppercase tracking-wide">
+              <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-900 text-xs font-semibold uppercase tracking-wide">
                 {user.role}
               </span>
             </div>
@@ -185,7 +185,7 @@ function LinkRow({ href, icon, label, desc }: { href: string; icon: string; labe
   return (
     <Link href={href}>
       <div className="flex items-center gap-4 p-4 hover:bg-accent transition cursor-pointer">
-        <span className="w-10 h-10 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center text-lg font-bold">{icon}</span>
+        <span className="w-10 h-10 rounded-xl bg-neutral-100 text-neutral-900 flex items-center justify-center text-lg font-bold">{icon}</span>
         <div className="flex-1 min-w-0">
           <div className="font-medium">{label}</div>
           <div className="text-xs text-muted-foreground">{desc}</div>

@@ -19,7 +19,7 @@ export function BudgetChart({ projects }: BudgetChartProps) {
   const maxBudget = Math.max(...active.map(p => p.budget ?? 0), 1);
 
   const statusColors: Record<string, string> = {
-    active: "#C8952A",
+    active: "#0a0a0a",
     completed: "#10B981",
     paused: "#F59E0B",
     cancelled: "#EF4444",
@@ -62,7 +62,7 @@ export function BudgetChart({ projects }: BudgetChartProps) {
                     <span className="text-muted-foreground font-mono">{fmt(spent)}</span>
                     <span className="text-muted-foreground">/</span>
                     <span className="font-mono text-foreground/60">{fmt(budget)}</span>
-                    <span className={`font-bold text-[10px] px-1.5 py-0.5 rounded-full ${over ? "bg-red-100 text-red-600" : "bg-amber-50 text-amber-700"}`}>
+                    <span className={`font-bold text-[10px] px-1.5 py-0.5 rounded-full ${over ? "bg-red-100 text-red-600" : "bg-neutral-50 text-neutral-900"}`}>
                       {Math.round(pct)}%
                     </span>
                   </div>
@@ -74,7 +74,7 @@ export function BudgetChart({ projects }: BudgetChartProps) {
                     animate={{ width: `${pct}%` }}
                     transition={{ delay: 0.2 + i * 0.06, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                     className="absolute top-0 left-0 h-full rounded-full"
-                    style={{ background: over ? "#EF4444" : "#C8952A" }}
+                    style={{ background: over ? "#EF4444" : "#0a0a0a" }}
                   />
                 </div>
                 {/* Progress bar */}

@@ -84,7 +84,7 @@ export default function FAQ() {
             value={q}
             onChange={e => setQ(e.target.value)}
             placeholder="Buscar pregunta…"
-            className="w-full pl-11 pr-4 py-3 rounded-2xl border border-border bg-card focus:border-orange-500 outline-none transition"
+            className="w-full pl-11 pr-4 py-3 rounded-2xl border border-border bg-card focus:border-neutral-700 outline-none transition"
           />
           <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground">⌕</span>
         </div>
@@ -117,7 +117,7 @@ export default function FAQ() {
                         className="w-full flex items-center justify-between gap-4 p-4 text-left hover:bg-accent transition"
                       >
                         <span className="font-medium">{item.title}</span>
-                        <span className={`text-orange-600 text-xl transition-transform ${isOpen ? "rotate-45" : ""}`}>+</span>
+                        <span className={`text-neutral-800 text-xl transition-transform ${isOpen ? "rotate-45" : ""}`}>+</span>
                       </button>
                       <AnimatePresence>
                         {isOpen && item.body && (
@@ -142,9 +142,9 @@ export default function FAQ() {
           )}
         </div>
 
-        <div className="bg-orange-50 border border-orange-200 rounded-2xl p-5 text-center">
-          <p className="text-sm text-orange-900 mb-2">¿Sigues con dudas?</p>
-          <a href="https://wa.me/529984292748" target="_blank" rel="noopener" className="inline-block px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-semibold transition">
+        <div className="bg-neutral-50 border border-neutral-200 rounded-2xl p-5 text-center">
+          <p className="text-sm text-black mb-2">¿Sigues con dudas?</p>
+          <a href="https://wa.me/529984292748" target="_blank" rel="noopener" className="inline-block px-5 py-2.5 rounded-xl bg-neutral-800 hover:bg-neutral-900 text-white font-semibold transition">
             Hablar con soporte
           </a>
         </div>

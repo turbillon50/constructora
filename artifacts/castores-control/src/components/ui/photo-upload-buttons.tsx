@@ -95,7 +95,7 @@ export function PhotoUploadButtons({
             )}
           </span>
           {atLimit && (
-            <span className="text-amber-700 font-semibold">Límite alcanzado</span>
+            <span className="text-neutral-900 font-semibold">Límite alcanzado</span>
           )}
         </div>
       )}
@@ -105,7 +105,7 @@ export function PhotoUploadButtons({
           type="button"
           onClick={pickCamera}
           disabled={isDisabled}
-          className={`${baseBtn} border-amber-300/60 hover:bg-amber-50`}
+          className={`${baseBtn} border-neutral-300/60 hover:bg-neutral-50`}
         >
           📷 Cámara
         </button>
@@ -120,13 +120,13 @@ export function PhotoUploadButtons({
       </div>
 
       {busy && (
-        <p className="text-[11px] text-amber-700 text-center font-semibold animate-pulse">
+        <p className="text-[11px] text-neutral-900 text-center font-semibold animate-pulse">
           {busyLabel || "Procesando..."}
         </p>
       )}
 
       {!busy && atLimit && (
-        <p className="text-[11px] text-amber-700 text-center">
+        <p className="text-[11px] text-neutral-900 text-center">
           Quita una foto para poder agregar otra.
         </p>
       )}

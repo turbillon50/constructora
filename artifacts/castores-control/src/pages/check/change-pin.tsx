@@ -87,20 +87,20 @@ export default function WorkerChangePinPage() {
     "w-full text-center text-3xl tracking-[0.6em] font-mono py-4 rounded-2xl";
   const inputStyle = {
     background: "rgba(255,255,255,0.08)",
-    border: "1.5px solid rgba(200,149,42,0.3)",
+    border: "1.5px solid rgba(10,10,10,0.85)",
     color: "#fff",
   } as const;
 
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center px-6 py-8"
-      style={{ background: "linear-gradient(160deg, #1a1612 0%, #2d2419 60%, #1a1612 100%)" }}
+      style={{ background: "linear-gradient(160deg, #0a0a0a 0%, #171717 60%, #0a0a0a 100%)" }}
     >
       <div className="w-full max-w-sm">
         <div className="text-center mb-6">
           <div
             className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4"
-            style={{ background: "rgba(200,149,42,0.15)", border: "1px solid rgba(200,149,42,0.4)" }}
+            style={{ background: "rgba(10,10,10,0.85)", border: "1px solid rgba(10,10,10,0.85)" }}
           >
             <span className="text-3xl">🔐</span>
           </div>
@@ -209,9 +209,9 @@ export default function WorkerChangePinPage() {
             disabled={busy || newPin.length !== 4 || confirmPin.length !== 4 || (!mustChange && currentPin.length !== 4)}
             className="w-full py-4 rounded-2xl text-base font-black tracking-wide disabled:opacity-40 transition-all"
             style={{
-              background: "linear-gradient(135deg, #C8952A, #E8A830)",
+              background: "linear-gradient(135deg, #0a0a0a, #E8A830)",
               color: "white",
-              boxShadow: "0 4px 20px rgba(200,149,42,0.35)",
+              boxShadow: "0 4px 20px rgba(10,10,10,0.85)",
             }}
             data-testid="button-change-pin"
           >

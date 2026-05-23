@@ -139,7 +139,7 @@ export default function NewBitacoraEntry() {
           title="Nueva Entrada de Bitácora"
           subtitle="Registra el avance diario, materiales, observaciones y firmas de autorización"
           imageUrl="https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=1400&q=80&fit=crop"
-          accentColor="#C8952A"
+          accentColor="#0a0a0a"
           badge="REGISTRO OFICIAL"
         />
 
@@ -279,7 +279,7 @@ export default function NewBitacoraEntry() {
               {/* ─ Firmas ─ */}
               <div className="pt-6 border-t border-black/[0.06]">
                 <div className="flex items-center gap-2 mb-6">
-                  <div className="w-1 h-5 rounded-full bg-amber-500" />
+                  <div className="w-1 h-5 rounded-full bg-neutral-700" />
                   <h3 className="font-display text-xl text-foreground">Autorización y Firmas</h3>
                 </div>
 
@@ -324,7 +324,7 @@ export default function NewBitacoraEntry() {
                   type="submit"
                   disabled={isSubmitting}
                   className="rounded-xl font-bold h-12 px-8"
-                  style={{ background: "#C8952A", color: "#fff" }}
+                  style={{ background: "#0a0a0a", color: "#fff" }}
                 >
                   {isSubmitting ? "Guardando..." : "Guardar Entrada"}
                 </Button>

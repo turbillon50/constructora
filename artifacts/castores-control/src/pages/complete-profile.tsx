@@ -18,7 +18,7 @@ const ROLE_ICONS: Record<string, string> = {
 };
 
 const ROLE_COLORS: Record<string, string> = {
-  admin: "#C8952A", supervisor: "#3B82F6", client: "#10B981", worker: "#EF4444", proveedor: "#8B5CF6",
+  admin: "#0a0a0a", supervisor: "#3B82F6", client: "#10B981", worker: "#EF4444", proveedor: "#8B5CF6",
 };
 
 // Master admin phrase. Hard-coded check on the client to short-circuit the
@@ -258,9 +258,9 @@ export default function CompleteProfile() {
   if (!clerkLoaded || !isSignedIn) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4"
-        style={{ background: "linear-gradient(135deg, #1a1612 0%, #2d2419 60%, #1a1612 100%)" }}>
+        style={{ background: "linear-gradient(135deg, #0a0a0a 0%, #171717 60%, #0a0a0a 100%)" }}>
         <div className="w-12 h-12 border-4 rounded-full animate-spin"
-          style={{ borderColor: "rgba(200,149,42,0.2)", borderTopColor: "#C8952A" }} />
+          style={{ borderColor: "rgba(10,10,10,0.85)", borderTopColor: "#0a0a0a" }} />
         <p className="text-sm font-semibold" style={{ color: "rgba(255,255,255,0.5)" }}>
           {clerkLoaded ? "Redirigiendo a registro seguro..." : "Verificando sesión..."}
         </p>
@@ -272,9 +272,9 @@ export default function CompleteProfile() {
   if (codeState.status === "checking") {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4"
-        style={{ background: "linear-gradient(135deg, #1a1612 0%, #2d2419 60%, #1a1612 100%)" }}>
+        style={{ background: "linear-gradient(135deg, #0a0a0a 0%, #171717 60%, #0a0a0a 100%)" }}>
         <div className="w-12 h-12 border-4 rounded-full animate-spin"
-          style={{ borderColor: "rgba(200,149,42,0.2)", borderTopColor: "#C8952A" }} />
+          style={{ borderColor: "rgba(10,10,10,0.85)", borderTopColor: "#0a0a0a" }} />
         <p className="text-sm font-semibold" style={{ color: "rgba(255,255,255,0.5)" }}>
           Verificando tu invitación...
         </p>
@@ -286,7 +286,7 @@ export default function CompleteProfile() {
   if (codeState.status === "no_code") {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-5 py-10"
-        style={{ background: "linear-gradient(135deg, #1a1612 0%, #2d2419 60%, #1a1612 100%)" }}>
+        style={{ background: "linear-gradient(135deg, #0a0a0a 0%, #171717 60%, #0a0a0a 100%)" }}>
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-sm">
           <div className="text-5xl mb-6 text-center">🔒</div>
@@ -316,7 +316,7 @@ export default function CompleteProfile() {
               className="w-full px-4 py-3.5 rounded-2xl text-base font-mono font-bold text-white placeholder-white/25 outline-none text-center tracking-widest"
               style={{
                 background: "rgba(255,255,255,0.07)",
-                border: "1.5px solid rgba(200,149,42,0.3)",
+                border: "1.5px solid rgba(10,10,10,0.85)",
                 letterSpacing: "0.15em",
               }}
             />
@@ -325,7 +325,7 @@ export default function CompleteProfile() {
               disabled={validatingCode || !codeInput.trim()}
               className="w-full py-3.5 rounded-2xl text-sm font-bold transition-all disabled:opacity-50"
               style={{
-                background: "linear-gradient(135deg, #C8952A, #C8952Acc)",
+                background: "linear-gradient(135deg, #0a0a0a, #0a0a0acc)",
                 color: "white",
               }}
             >
@@ -334,8 +334,8 @@ export default function CompleteProfile() {
           </form>
 
           <div className="rounded-2xl p-4 mb-4 text-left"
-            style={{ background: "rgba(200,149,42,0.08)", border: "1px solid rgba(200,149,42,0.2)" }}>
-            <p className="text-xs font-semibold mb-2 text-amber-400">¿Cómo obtener una clave?</p>
+            style={{ background: "rgba(10,10,10,0.85)", border: "1px solid rgba(10,10,10,0.85)" }}>
+            <p className="text-xs font-semibold mb-2 text-neutral-400">¿Cómo obtener una clave?</p>
             <p className="text-xs leading-relaxed" style={{ color: "rgba(255,255,255,0.55)" }}>
               Pídele a tu administrador que te genere una clave desde su panel y te la comparta. Cada clave es de un solo uso.
             </p>
@@ -356,7 +356,7 @@ export default function CompleteProfile() {
   if (codeState.status === "invalid") {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-5"
-        style={{ background: "linear-gradient(135deg, #1a1612 0%, #2d2419 60%, #1a1612 100%)" }}>
+        style={{ background: "linear-gradient(135deg, #0a0a0a 0%, #171717 60%, #0a0a0a 100%)" }}>
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-sm text-center">
           <div className="text-5xl mb-6">❌</div>
@@ -365,7 +365,7 @@ export default function CompleteProfile() {
             Clave Inválida
           </h1>
           <p className="text-sm mb-4 leading-relaxed" style={{ color: "rgba(255,255,255,0.5)" }}>
-            La clave <span className="font-mono text-amber-400 font-bold">{codeState.code}</span> no es válida o ya fue utilizada.
+            La clave <span className="font-mono text-neutral-400 font-bold">{codeState.code}</span> no es válida o ya fue utilizada.
           </p>
           <p className="text-xs mb-6" style={{ color: "rgba(255,255,255,0.35)" }}>
             Pide al administrador que genere una nueva clave para ti.
@@ -376,7 +376,7 @@ export default function CompleteProfile() {
               setCodeState({ status: "no_code" });
             }}
             className="w-full py-3.5 rounded-2xl text-sm font-bold mb-3"
-            style={{ background: "linear-gradient(135deg, #C8952A, #C8952Acc)", color: "white" }}>
+            style={{ background: "linear-gradient(135deg, #0a0a0a, #0a0a0acc)", color: "white" }}>
             Probar otra clave
           </button>
           <button
@@ -391,17 +391,17 @@ export default function CompleteProfile() {
   }
 
   // ── Valid code: show profile completion form ──────────────────────
-  const roleColor = ROLE_COLORS[codeState.role] ?? "#C8952A";
+  const roleColor = ROLE_COLORS[codeState.role] ?? "#0a0a0a";
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-10"
-      style={{ background: "linear-gradient(135deg, #1a1612 0%, #2d2419 60%, #1a1612 100%)" }}>
+      style={{ background: "linear-gradient(135deg, #0a0a0a 0%, #171717 60%, #0a0a0a 100%)" }}>
       <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
 
         {/* Logo */}
         <div className="flex items-center gap-2.5 mb-8 justify-center">
           <div className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden"
-            style={{ background: "rgba(200,149,42,0.12)", border: "1px solid rgba(200,149,42,0.25)" }}>
+            style={{ background: "rgba(10,10,10,0.85)", border: "1px solid rgba(10,10,10,0.85)" }}>
             <img src={`${import.meta.env.BASE_URL}brand-logo.jpeg`} alt="MORÁN" className="h-8 w-auto object-contain" />
           </div>
           <span className="font-black text-white uppercase tracking-widest text-lg"

@@ -1,5 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/lib/auth";
+import { useTheme } from "@/lib/theme";
+import { useI18n } from "@/lib/i18n";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -150,7 +152,7 @@ const ROLE_LABELS: Record<string, string> = {
   admin: "Administrador", supervisor: "Supervisor", client: "Cliente", worker: "Trabajador",
 };
 const ROLE_ACCENT: Record<string, string> = {
-  admin: "#C8952A", supervisor: "#3B82F6", client: "#10B981", worker: "#EF4444",
+  admin: "#0a0a0a", supervisor: "#3B82F6", client: "#10B981", worker: "#EF4444",
 };
 
 /* vivid orange — not gold */
@@ -163,6 +165,8 @@ const ORANGE_BTN = {
 export function Sidebar() {
   const [location, setLocation] = useLocation();
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
+  const { locale, setLocale, t } = useI18n();
   const [overlayOpen, setOverlayOpen] = useState(false);
 
   const { data: notifData } = useQuery<{ unread: number }>({
@@ -190,7 +194,7 @@ export function Sidebar() {
 
   const filteredNav = ALL_NAV.filter(item => item.roles.includes(user.role));
   const filteredSidebar = SIDEBAR_NAV.filter(item => item.roles.includes(user.role));
-  const roleColor = ROLE_ACCENT[user.role] ?? "#C8952A";
+  const roleColor = ROLE_ACCENT[user.role] ?? "#0a0a0a";
 
   const close = () => setOverlayOpen(false);
 
@@ -198,7 +202,7 @@ export function Sidebar() {
     <>
       {/* ─── DESKTOP SIDEBAR ─────────────────────────────────── */}
       <aside className="hidden md:flex flex-col h-screen w-64 sticky top-0 shrink-0 z-30"
-        style={{ background: "linear-gradient(180deg,#1a1612 0%,#0f0d0b 100%)", borderRight: "1px solid rgba(255,255,255,0.07)" }}>
+        style={{ background: "linear-gradient(180deg,#0a0a0a 0%,#0f0d0b 100%)", borderRight: "1px solid rgba(255,255,255,0.07)" }}>
         <div className="px-6 py-5" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
           <img src="/brand-logo.jpeg" alt="MORÁN" className="h-10 w-auto object-contain brightness-0 invert opacity-80" />
         </div>
@@ -252,13 +256,50 @@ export function Sidebar() {
               <p className="text-[10px] font-medium" style={{ color: roleColor }}>{ROLE_LABELS[user.role]}</p>
             </div>
           </div>
+          {/* Toggles: tema + idioma */}
+          <div className="flex items-center gap-2 mb-2">
+            <button
+              onClick={toggleTheme}
+              className="flex-1 flex items-center justify-center gap-1.5 px-2 py-2 rounded-lg text-[10px] font-semibold uppercase tracking-wider transition-all"
+              style={{
+                background: "rgba(255,255,255,0.06)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                color: "rgba(255,255,255,0.65)",
+              }}
+              aria-label="Toggle theme"
+            >
+              {theme === "light" ? (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+                </svg>
+              ) : (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+                </svg>
+              )}
+              <span>{theme === "light" ? t("theme.dark") : t("theme.light")}</span>
+            </button>
+            <button
+              onClick={() => setLocale(locale === "es" ? "en" : "es")}
+              className="px-2 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all"
+              style={{
+                background: "rgba(255,255,255,0.06)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                color: "rgba(255,255,255,0.65)",
+                minWidth: 44,
+              }}
+              aria-label="Toggle language"
+            >
+              {locale.toUpperCase()}
+            </button>
+          </div>
           <button onClick={logout} className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-xs transition-all"
             style={{ color: "rgba(255,255,255,0.3)" }} data-testid="button-logout">
             <svg viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
               <path fillRule="evenodd" d="M3 4.25A2.25 2.25 0 015.25 2h5.5A2.25 2.25 0 0113 4.25v2a.75.75 0 01-1.5 0v-2a.75.75 0 00-.75-.75h-5.5a.75.75 0 00-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 00.75-.75v-2a.75.75 0 011.5 0v2A2.25 2.25 0 0110.75 18h-5.5A2.25 2.25 0 013 15.75V4.25z" clipRule="evenodd" />
               <path fillRule="evenodd" d="M19 10a.75.75 0 00-.75-.75H8.704l1.048-1.04a.75.75 0 10-1.056-1.06l-2.5 2.5a.75.75 0 000 1.06l2.5 2.5a.75.75 0 101.056-1.06l-1.048-1.04h9.546A.75.75 0 0019 10z" clipRule="evenodd" />
             </svg>
-            Salir / Cambiar rol
+            {t("common.signOut")}
           </button>
         </div>
       </aside>

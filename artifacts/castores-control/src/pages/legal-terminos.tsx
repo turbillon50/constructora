@@ -4,13 +4,13 @@ import { MainLayout } from "@/components/layout/main-layout";
 import { apiUrl } from "@/lib/api-url";
 import { useLocation } from "wouter";
 
-const FALLBACK_TERMS = `Bienvenido a Castores Control, plataforma operada por CASTORES Estructuras y Construcciones (en adelante, "la Empresa"). Al usar esta aplicación, aceptas estos Términos.
+const FALLBACK_TERMS = `Bienvenido a Morán Control, plataforma operada por Morán (en adelante, "la Empresa"). Al usar esta aplicación, aceptas estos Términos.
 
 1. ACEPTACIÓN
 El uso de la plataforma implica la aceptación expresa de estos Términos y de la Política de Privacidad. Si no estás de acuerdo, no debes utilizar el servicio.
 
 2. USO DE LA PLATAFORMA
-Castores Control es una herramienta interna para la gestión de proyectos de obra (bitácoras, materiales, reportes y documentos). Solo personas autorizadas mediante un código de invitación pueden registrarse.
+Morán Control es una herramienta interna para la gestión de proyectos de obra (bitácoras, materiales, reportes y documentos). Solo personas autorizadas mediante un código de invitación pueden registrarse.
 
 3. RESPONSABILIDADES DEL USUARIO
 - Mantener la confidencialidad de su cuenta y credenciales.

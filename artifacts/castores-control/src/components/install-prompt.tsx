@@ -84,12 +84,12 @@ export function InstallPrompt() {
             className="fixed left-3 right-3 bottom-3 z-40 md:left-auto md:right-6 md:bottom-6 md:max-w-sm"
           >
             <div className="bg-foreground text-background rounded-2xl shadow-2xl p-4 flex items-center gap-3">
-              <div className="w-11 h-11 rounded-xl bg-orange-500 text-white flex items-center justify-center text-xl font-bold flex-shrink-0">↓</div>
+              <div className="w-11 h-11 rounded-xl bg-neutral-700 text-white flex items-center justify-center text-xl font-bold flex-shrink-0">↓</div>
               <div className="flex-1 min-w-0">
-                <div className="font-bebas tracking-wide text-lg leading-tight">INSTALAR CASTORES</div>
+                <div className="font-bebas tracking-wide text-lg leading-tight">INSTALAR MORÁN</div>
                 <div className="text-xs opacity-75">Acceso rápido desde tu pantalla de inicio.</div>
               </div>
-              <button onClick={install} className="px-3 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold flex-shrink-0">
+              <button onClick={install} className="px-3 py-2 rounded-xl bg-neutral-700 hover:bg-neutral-800 text-white text-sm font-semibold flex-shrink-0">
                 Instalar
               </button>
               <button onClick={dismiss} aria-label="Cerrar" className="text-background/60 hover:text-background text-xl leading-none w-7 h-7 flex items-center justify-center flex-shrink-0">×</button>
@@ -111,18 +111,18 @@ export function InstallPrompt() {
               className="bg-card rounded-2xl max-w-sm w-full p-6 space-y-4"
             >
               <div className="flex items-start gap-3">
-                <div className="w-12 h-12 rounded-xl bg-orange-500 text-white flex items-center justify-center text-2xl font-bold">⌃</div>
+                <div className="w-12 h-12 rounded-xl bg-neutral-700 text-white flex items-center justify-center text-2xl font-bold">⌃</div>
                 <div className="flex-1">
                   <h3 className="font-bebas text-2xl tracking-wide">INSTALAR EN iPHONE</h3>
                   <p className="text-sm text-muted-foreground">Sigue estos 3 pasos en Safari:</p>
                 </div>
               </div>
               <ol className="space-y-3 text-sm">
-                <li className="flex gap-3"><span className="font-bebas text-orange-600 text-xl">1.</span><span>Toca el botón <b>Compartir</b> <span className="inline-block px-1.5 py-0.5 bg-accent rounded">⎙</span> en la barra inferior de Safari.</span></li>
-                <li className="flex gap-3"><span className="font-bebas text-orange-600 text-xl">2.</span><span>Desliza y selecciona <b>"Agregar a pantalla de inicio"</b>.</span></li>
-                <li className="flex gap-3"><span className="font-bebas text-orange-600 text-xl">3.</span><span>Toca <b>Agregar</b>. ¡Listo! Castores aparecerá como app en tu pantalla.</span></li>
+                <li className="flex gap-3"><span className="font-bebas text-neutral-800 text-xl">1.</span><span>Toca el botón <b>Compartir</b> <span className="inline-block px-1.5 py-0.5 bg-accent rounded">⎙</span> en la barra inferior de Safari.</span></li>
+                <li className="flex gap-3"><span className="font-bebas text-neutral-800 text-xl">2.</span><span>Desliza y selecciona <b>"Agregar a pantalla de inicio"</b>.</span></li>
+                <li className="flex gap-3"><span className="font-bebas text-neutral-800 text-xl">3.</span><span>Toca <b>Agregar</b>. ¡Listo! Morán aparecerá como app en tu pantalla.</span></li>
               </ol>
-              <button onClick={dismiss} className="w-full py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-semibold">
+              <button onClick={dismiss} className="w-full py-2.5 rounded-xl bg-neutral-700 hover:bg-neutral-800 text-white font-semibold">
                 Entendido
               </button>
             </motion.div>

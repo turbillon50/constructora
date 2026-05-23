@@ -81,9 +81,9 @@ const DEFAULT_VIBRATE = [220, 100, 220, 100, 220];
 self.addEventListener('push', (event) => {
   let data = {};
   try { data = event.data ? event.data.json() : {}; }
-  catch { data = { title: 'Castores', body: event.data ? event.data.text() : '' }; }
+  catch { data = { title: 'Morán', body: event.data ? event.data.text() : '' }; }
 
-  const title = data.title || 'Castores Control';
+  const title = data.title || 'Morán Control';
   const options = {
     body: data.body || '',
     icon: data.icon || '/icon-192.png',
@@ -95,7 +95,7 @@ self.addEventListener('push', (event) => {
     // renotify=true junto con tag igual al anterior fuerza al sistema a
     // re-mostrar y vibrar incluso si una notificación previa con ese tag
     // ya estaba ahí. Evita el caso "el celular se quedó callado porque
-    // ya había un Castores en la barra".
+    // ya había un Morán en la barra".
     renotify: !!data.tag,
   };
   event.waitUntil(self.registration.showNotification(title, options));

@@ -154,7 +154,7 @@ export default function AsistenciaDashboardPage() {
               <button
                 onClick={() => setLocation("/asistencia/qr")}
                 className="px-4 py-2 rounded-xl text-sm font-bold text-white"
-                style={{ background: "#1a1612" }}
+                style={{ background: "#0a0a0a" }}
                 data-testid="button-go-qr"
               >
                 📱 Mostrar QR
@@ -163,8 +163,8 @@ export default function AsistenciaDashboardPage() {
             {perms.has("attendanceExport") && (
               <button
                 onClick={onExport}
-                className="px-4 py-2 rounded-xl text-sm font-bold text-amber-800"
-                style={{ background: "rgba(200,149,42,0.18)", border: "1px solid rgba(200,149,42,0.4)" }}
+                className="px-4 py-2 rounded-xl text-sm font-bold text-neutral-900"
+                style={{ background: "rgba(10,10,10,0.85)", border: "1px solid rgba(10,10,10,0.85)" }}
                 data-testid="button-export-csv"
               >
                 ⬇ Exportar CSV
@@ -175,10 +175,10 @@ export default function AsistenciaDashboardPage() {
 
         {/* KPIs */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <Kpi label="Registros" value={String(summary.total)} accent="#1a1612" />
+          <Kpi label="Registros" value={String(summary.total)} accent="#0a0a0a" />
           <Kpi label="En obra ahora" value={String(summary.open)} accent="#22C55E" />
           <Kpi label="Marcados" value={String(summary.flagged)} accent="#F59E0B" />
-          <Kpi label="Horas totales" value={String(summary.totalHours)} accent="#C8952A" />
+          <Kpi label="Horas totales" value={String(summary.totalHours)} accent="#0a0a0a" />
         </div>
 
         {/* Filtros */}
@@ -262,7 +262,7 @@ export default function AsistenciaDashboardPage() {
                     const flagged = r.checkInStatus === "flagged" || r.checkOutStatus === "flagged";
                     const hours = r.totalMinutes != null ? (r.totalMinutes / 60).toFixed(1) : "—";
                     return (
-                      <tr key={r.id} className="border-t border-gray-100 hover:bg-amber-50/30">
+                      <tr key={r.id} className="border-t border-gray-100 hover:bg-neutral-50/30">
                         <td className="px-4 py-3">
                           <p className="font-semibold text-gray-900">{r.userName ?? "—"}</p>
                           {r.userWorkerCode && (

@@ -182,15 +182,15 @@ export function PushAutoPrompt() {
           <div
             className="pointer-events-auto rounded-2xl p-4 shadow-2xl"
             style={{
-              background: "linear-gradient(135deg, #1a1612 0%, #2d2419 100%)",
-              border: "1px solid rgba(200,149,42,0.4)",
+              background: "linear-gradient(135deg, #0a0a0a 0%, #171717 100%)",
+              border: "1px solid rgba(10,10,10,0.85)",
               boxShadow: "0 12px 40px rgba(0,0,0,0.4)",
             }}
           >
             <div className="flex items-start gap-3">
               <div
                 className="w-11 h-11 rounded-xl flex items-center justify-center text-2xl shrink-0"
-                style={{ background: "rgba(200,149,42,0.18)", border: "1px solid rgba(200,149,42,0.35)" }}
+                style={{ background: "rgba(10,10,10,0.85)", border: "1px solid rgba(10,10,10,0.85)" }}
               >
                 🔔
               </div>
@@ -207,7 +207,7 @@ export function PushAutoPrompt() {
                         onClick={enable}
                         disabled={busy}
                         className="flex-1 rounded-xl py-2.5 font-bold text-sm transition active:scale-[0.97] disabled:opacity-50"
-                        style={{ background: "#C8952A", color: "#fff", boxShadow: "0 4px 14px rgba(200,149,42,0.4)" }}
+                        style={{ background: "#0a0a0a", color: "#fff", boxShadow: "0 4px 14px rgba(10,10,10,0.85)" }}
                       >
                         {busy ? "Activando..." : "Activar"}
                       </button>
@@ -225,7 +225,7 @@ export function PushAutoPrompt() {
 
                 {mode === "ios-pwa" && (
                   <>
-                    <h3 className="text-white font-bold text-base leading-tight">Instala Castores en tu iPhone</h3>
+                    <h3 className="text-white font-bold text-base leading-tight">Instala Morán en tu iPhone</h3>
                     <p className="text-white/65 text-xs mt-1 leading-relaxed">
                       iPhone solo permite avisos al celular si la app está en tu pantalla de inicio.
                       Es rápido:
@@ -233,7 +233,7 @@ export function PushAutoPrompt() {
                     <ol className="text-white/75 text-xs mt-2 space-y-1 list-decimal list-inside">
                       <li>Toca <strong>Compartir</strong> (cuadrado con flecha ↑)</li>
                       <li>Elige <strong>"Añadir a pantalla de inicio"</strong></li>
-                      <li>Abre Castores desde el ícono nuevo</li>
+                      <li>Abre Morán desde el ícono nuevo</li>
                     </ol>
                     <div className="flex gap-2 mt-3">
                       <button
@@ -252,7 +252,7 @@ export function PushAutoPrompt() {
                     <h3 className="text-white font-bold text-base leading-tight">Avisos bloqueados</h3>
                     <p className="text-white/65 text-xs mt-1 leading-relaxed">
                       En su momento bloqueaste las notificaciones. Para activarlas:
-                      ajustes del navegador → busca <strong>Castores</strong> → Permitir notificaciones.
+                      ajustes del navegador → busca <strong>Morán</strong> → Permitir notificaciones.
                     </p>
                     <button
                       onClick={dismiss}

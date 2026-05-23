@@ -10,7 +10,7 @@ interface PageHeroProps {
   children?: ReactNode;
 }
 
-export function PageHero({ title, subtitle, imageUrl, accentColor = "#C8952A", badge, children }: PageHeroProps) {
+export function PageHero({ title, subtitle, imageUrl, accentColor = "#0a0a0a", badge, children }: PageHeroProps) {
   return (
     <div className="relative w-full rounded-2xl overflow-hidden mb-8" style={{ height: 200 }}>
       {/* Background image */}

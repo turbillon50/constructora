@@ -391,7 +391,7 @@ router.post("/users/:id/send-password-reset", async (req, res): Promise<void> =>
   const body = Buffer.from(JSON.stringify(payload)).toString("base64url");
   const sig = createHmac("sha256", secret).update(body).digest("base64url");
   const token = `${body}.${sig}`;
-  const resetUrl = `https://castores.info/reset-password?token=${encodeURIComponent(token)}`;
+  const resetUrl = `https://moran.demo/reset-password?token=${encodeURIComponent(token)}`;
 
   try {
     await sendPasswordResetEmail({

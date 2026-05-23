@@ -22,8 +22,8 @@ async function recordEmailFailure(opts: { kind: string; to: string; subject: str
   }
 }
 
-const FROM_EMAIL = "Castores Control <no-reply@castores.info>";
-const APP_URL = "https://castores.info";
+const FROM_EMAIL = "Morán Control <no-reply@moran.demo>";
+const APP_URL = "https://moran.demo";
 
 const ROLE_LABELS: Record<string, string> = {
   admin: "Administrador",
@@ -48,7 +48,7 @@ function baseTemplate(content: string) {
               <span style="color:#fff;font-weight:900;font-size:16px;">C</span>
             </div>
             <div>
-              <div style="color:#C8952A;font-weight:900;font-size:15px;letter-spacing:0.15em;">CASTORES</div>
+              <div style="color:#C8952A;font-weight:900;font-size:15px;letter-spacing:0.15em;">MORÁN</div>
               <div style="color:rgba(255,255,255,0.45);font-size:10px;letter-spacing:0.2em;">ESTRUCTURAS Y CONSTRUCCIONES</div>
             </div>
           </div>
@@ -60,8 +60,8 @@ function baseTemplate(content: string) {
         <!-- Footer -->
         <tr><td style="background:#f8f4ef;padding:24px 40px;border-top:1px solid rgba(0,0,0,0.06);">
           <p style="margin:0;color:#aaa;font-size:11px;text-align:center;">
-            © ${new Date().getFullYear()} CASTORES Estructuras y Construcciones &nbsp;·&nbsp;
-            <a href="${APP_URL}" style="color:#C8952A;text-decoration:none;">castores.info</a>
+            © ${new Date().getFullYear()} Morán &nbsp;·&nbsp;
+            <a href="${APP_URL}" style="color:#C8952A;text-decoration:none;">moran.demo</a>
           </p>
         </td></tr>
       </table>
@@ -154,7 +154,7 @@ export async function sendApprovalEmail(opts: {
   const html = baseTemplate(`
     <h2 style="margin:0 0 8px;color:#10B981;font-size:22px;font-weight:800;">✓ Acceso aprobado</h2>
     <p style="margin:0 0 16px;color:#1a1612;font-size:15px;line-height:1.6;">
-      Hola <strong>${opts.name}</strong>, tu solicitud de acceso a Castores Control ha sido aprobada.
+      Hola <strong>${opts.name}</strong>, tu solicitud de acceso a Morán Control ha sido aprobada.
     </p>
     <p style="margin:0 0 28px;color:#777;font-size:14px;line-height:1.6;">
       Ya puedes iniciar sesión con tu cuenta y acceder al sistema con el rol de <strong>${roleLabel}</strong>.
@@ -167,7 +167,7 @@ export async function sendApprovalEmail(opts: {
 
   return sendEmail(
     opts.to,
-    "Tu acceso a Castores Control fue aprobado",
+    "Tu acceso a Morán Control fue aprobado",
     html,
     "approval",
   );
@@ -186,16 +186,16 @@ export async function sendRejectionEmail(opts: {
     </p>
     <p style="margin:0 0 28px;color:#777;font-size:14px;line-height:1.6;">
       Si crees que esto es un error o deseas más información, contacta directamente 
-      al administrador de CASTORES Estructuras y Construcciones.
+      al administrador de Morán.
     </p>
-    <a href="mailto:admin@castores.info" style="display:inline-block;padding:12px 24px;background:#f4f4f4;color:#1a1612;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;border:1px solid rgba(0,0,0,0.1);">
+    <a href="mailto:admin@moran.demo" style="display:inline-block;padding:12px 24px;background:#f4f4f4;color:#1a1612;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;border:1px solid rgba(0,0,0,0.1);">
       Contactar al administrador
     </a>
   `);
 
   return sendEmail(
     opts.to,
-    "Tu solicitud de acceso a Castores Control",
+    "Tu solicitud de acceso a Morán Control",
     html,
     "rejection",
   );
@@ -209,10 +209,10 @@ export async function sendWelcomeEmail(opts: {
 }) {
   const roleLabel = ROLE_LABELS[opts.role] ?? opts.role;
   const html = baseTemplate(`
-    <h2 style="margin:0 0 8px;color:#C8952A;font-size:22px;font-weight:800;">Bienvenido a Castores Control</h2>
+    <h2 style="margin:0 0 8px;color:#C8952A;font-size:22px;font-weight:800;">Bienvenido a Morán Control</h2>
     <p style="margin:0 0 16px;color:#1a1612;font-size:15px;line-height:1.6;">
       Hola <strong>${opts.name}</strong>, tu cuenta ha sido creada en el sistema 
-      de control operacional de CASTORES.
+      de control operacional de MORÁN.
     </p>
     <p style="margin:0 0 28px;color:#777;font-size:14px;line-height:1.6;">
       Accede con el rol de <strong>${roleLabel}</strong> usando el botón de abajo.
@@ -220,7 +220,7 @@ export async function sendWelcomeEmail(opts: {
     ${btn(APP_URL, "Ingresar al sistema →")}
   `);
 
-  return sendEmail(opts.to, "Bienvenido a Castores Control", html, "welcome");
+  return sendEmail(opts.to, "Bienvenido a Morán Control", html, "welcome");
 }
 
 /* ─── Firma de bitácora ─── */
@@ -298,7 +298,7 @@ export async function sendPasswordResetEmail(opts: {
   const html = baseTemplate(`
     <h2 style="margin:0 0 8px;color:#1a1612;font-size:22px;font-weight:800;">Restablecer contraseña</h2>
     <p style="margin:0 0 16px;color:#1a1612;font-size:15px;line-height:1.6;">
-      Hola <strong>${opts.name}</strong>, recibimos una solicitud para cambiar la contraseña de tu cuenta de Castores Control.
+      Hola <strong>${opts.name}</strong>, recibimos una solicitud para cambiar la contraseña de tu cuenta de Morán Control.
     </p>
     <p style="margin:0 0 24px;color:#777;font-size:14px;line-height:1.6;">
       Da clic en el botón para elegir una contraseña nueva. El enlace expira en
@@ -313,7 +313,7 @@ export async function sendPasswordResetEmail(opts: {
 
   return sendEmail(
     opts.to,
-    "Restablecer contraseña — Castores Control",
+    "Restablecer contraseña — Morán Control",
     html,
     "password-reset",
   );

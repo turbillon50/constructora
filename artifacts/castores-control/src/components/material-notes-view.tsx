@@ -145,7 +145,7 @@ export function MaterialNotesView({ canCreate }: Props) {
           <Button
             onClick={() => setShowForm(true)}
             className="rounded-xl font-bold"
-            style={{ background: "#C8952A", color: "#fff" }}
+            style={{ background: "#0a0a0a", color: "#fff" }}
           >
             <Icons.Plus className="w-4 h-4 mr-1.5" /> Nueva nota
           </Button>
@@ -205,7 +205,7 @@ export function MaterialNotesView({ canCreate }: Props) {
                   {g.count} {g.count === 1 ? "nota" : "notas"}
                 </span>
               </div>
-              <span className="text-sm font-bold tabular-nums" style={{ color: "#C8952A" }}>{fmtMoney(g.total)}</span>
+              <span className="text-sm font-bold tabular-nums" style={{ color: "#0a0a0a" }}>{fmtMoney(g.total)}</span>
             </header>
             <div className="space-y-2">
               {g.items.map((n) => (
@@ -370,7 +370,7 @@ function NoteRow({
             {note.createdByName ? ` · ${note.createdByName}` : ""}
           </p>
         </div>
-        <span className="text-sm font-bold tabular-nums shrink-0" style={{ color: "#C8952A" }}>
+        <span className="text-sm font-bold tabular-nums shrink-0" style={{ color: "#0a0a0a" }}>
           {fmtMoney(note.totalAmount)}
         </span>
         <svg
@@ -407,7 +407,7 @@ function NoteRow({
                   {it.costPerUnit != null && (
                     <span className="font-mono text-muted-foreground shrink-0 hidden sm:inline">× {fmtMoney(it.costPerUnit)}</span>
                   )}
-                  <span className="font-mono font-semibold tabular-nums shrink-0" style={{ color: "#C8952A" }}>
+                  <span className="font-mono font-semibold tabular-nums shrink-0" style={{ color: "#0a0a0a" }}>
                     {fmtMoney(it.totalCost ?? 0)}
                   </span>
                 </div>
@@ -486,7 +486,7 @@ function NoteRow({
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <h3 className="font-bold text-sm">Conceptos</h3>
-                    <button type="button" onClick={() => setEditItems((prev) => [...prev, { ...EMPTY_ITEM }])} className="text-xs font-bold text-amber-700 hover:underline">
+                    <button type="button" onClick={() => setEditItems((prev) => [...prev, { ...EMPTY_ITEM }])} className="text-xs font-bold text-neutral-900 hover:underline">
                       + Agregar concepto
                     </button>
                   </div>
@@ -511,7 +511,7 @@ function NoteRow({
                       </div>
                       <div className="flex items-baseline justify-between text-xs">
                         <span className="text-muted-foreground">Subtotal</span>
-                        <span className="font-mono font-bold tabular-nums" style={{ color: "#C8952A" }}>
+                        <span className="font-mono font-bold tabular-nums" style={{ color: "#0a0a0a" }}>
                           {fmtMoney((Number(it.quantityRequested) || 0) * (Number(it.costPerUnit) || 0))}
                         </span>
                       </div>
@@ -519,16 +519,16 @@ function NoteRow({
                   ))}
                 </div>
 
-                <div className="rounded-xl p-4 flex items-baseline justify-between" style={{ background: "rgba(200,149,42,0.08)", border: "1px solid rgba(200,149,42,0.2)" }}>
+                <div className="rounded-xl p-4 flex items-baseline justify-between" style={{ background: "rgba(10,10,10,0.85)", border: "1px solid rgba(10,10,10,0.85)" }}>
                   <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Total</span>
-                  <span className="font-display text-2xl tabular-nums" style={{ color: "#C8952A" }}>
+                  <span className="font-display text-2xl tabular-nums" style={{ color: "#0a0a0a" }}>
                     {fmtMoney(editItems.reduce((acc, it) => acc + (Number(it.quantityRequested) || 0) * (Number(it.costPerUnit) || 0), 0))}
                   </span>
                 </div>
 
                 <div className="flex gap-3">
                   <Button variant="outline" onClick={() => setEditOpen(false)} disabled={editSaving} className="flex-1 rounded-xl border-black/10">Cancelar</Button>
-                  <Button onClick={handleEditSave} disabled={editSaving} className="flex-1 rounded-xl font-bold" style={{ background: "#C8952A", color: "#fff" }}>
+                  <Button onClick={handleEditSave} disabled={editSaving} className="flex-1 rounded-xl font-bold" style={{ background: "#0a0a0a", color: "#fff" }}>
                     {editSaving ? "Guardando…" : "Guardar cambios"}
                   </Button>
                 </div>
@@ -787,7 +787,7 @@ function NewNoteModal({
             onClick={handleScanReceipt}
             disabled={scanning || submitting}
             className="w-full text-xs font-semibold py-3 rounded-xl border-2 border-dashed transition hover:bg-foreground/[0.02] flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-wait"
-            style={{ borderColor: "rgba(200,149,42,0.4)", color: "#C8952A" }}
+            style={{ borderColor: "rgba(10,10,10,0.85)", color: "#0a0a0a" }}
           >
             <span className="text-base">📷</span>
             <span>{scanning ? "Leyendo la nota…" : "Escanear nota con foto"}</span>
@@ -803,7 +803,7 @@ function NewNoteModal({
               <button
                 type="button"
                 onClick={addRow}
-                className="text-xs font-bold text-amber-700 hover:underline"
+                className="text-xs font-bold text-neutral-900 hover:underline"
               >
                 + Agregar concepto
               </button>
@@ -850,7 +850,7 @@ function NewNoteModal({
                   {/* Subtotal del renglón */}
                   <div className="flex items-baseline justify-between text-xs">
                     <span className="text-muted-foreground">Subtotal</span>
-                    <span className="font-mono font-bold tabular-nums" style={{ color: "#C8952A" }}>
+                    <span className="font-mono font-bold tabular-nums" style={{ color: "#0a0a0a" }}>
                       {fmtMoney((Number(it.quantityRequested) || 0) * (Number(it.costPerUnit) || 0))}
                     </span>
                   </div>
@@ -864,14 +864,14 @@ function NewNoteModal({
           </Field>
 
           {/* Total */}
-          <div className="rounded-xl p-4 flex items-baseline justify-between" style={{ background: "rgba(200,149,42,0.08)", border: "1px solid rgba(200,149,42,0.2)" }}>
+          <div className="rounded-xl p-4 flex items-baseline justify-between" style={{ background: "rgba(10,10,10,0.85)", border: "1px solid rgba(10,10,10,0.85)" }}>
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Total de la nota</span>
-            <span className="font-display text-2xl tabular-nums" style={{ color: "#C8952A" }}>{fmtMoney(total)}</span>
+            <span className="font-display text-2xl tabular-nums" style={{ color: "#0a0a0a" }}>{fmtMoney(total)}</span>
           </div>
 
           <div className="flex gap-3">
             <Button variant="outline" onClick={onClose} disabled={submitting} className="flex-1 rounded-xl border-black/10">Cancelar</Button>
-            <Button onClick={handleSubmit} disabled={submitting} className="flex-1 rounded-xl font-bold" style={{ background: "#C8952A", color: "#fff" }}>
+            <Button onClick={handleSubmit} disabled={submitting} className="flex-1 rounded-xl font-bold" style={{ background: "#0a0a0a", color: "#fff" }}>
               {submitting ? "Guardando…" : "Guardar nota"}
             </Button>
           </div>

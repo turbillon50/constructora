@@ -20,7 +20,7 @@ const ROLE_LABELS: Record<string, string> = {
   worker: "Trabajador", proveedor: "Proveedor",
 };
 const ROLE_COLORS: Record<string, string> = {
-  admin: "#C8952A", supervisor: "#3B82F6", client: "#10B981",
+  admin: "#0a0a0a", supervisor: "#3B82F6", client: "#10B981",
   worker: "#EF4444", proveedor: "#8B5CF6",
 };
 const STATUS_LABELS: Record<string, string> = {
@@ -177,15 +177,15 @@ export default function Usuarios() {
       <div className="space-y-6 pb-4">
         <PageHero
           title="Equipo de Trabajo"
-          subtitle="Gestión de accesos, roles y aprobaciones del personal de CASTORES"
+          subtitle="Gestión de accesos, roles y aprobaciones del personal de MORÁN"
           imageUrl="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1400&q=80&fit=crop"
-          accentColor="#C8952A"
+          accentColor="#0a0a0a"
           badge="GESTIÓN DE PERSONAL"
         >
           <div className="mt-1 flex flex-wrap gap-2">
             <button onClick={openCreate}
               className="text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-1.5"
-              style={{ background: "rgba(200,149,42,0.25)", border: "1px solid rgba(200,149,42,0.5)", color: "#fff" }}>
+              style={{ background: "rgba(10,10,10,0.85)", border: "1px solid rgba(10,10,10,0.85)", color: "#fff" }}>
               + Agregar Usuario
             </button>
             <button onClick={() => setWorkerModalOpen(true)}
@@ -211,36 +211,36 @@ export default function Usuarios() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               className="rounded-2xl overflow-hidden"
-              style={{ border: "1.5px solid rgba(200,149,42,0.3)", background: "rgba(200,149,42,0.04)" }}
+              style={{ border: "1.5px solid rgba(10,10,10,0.85)", background: "rgba(10,10,10,0.85)" }}
             >
-              <div className="px-5 py-3.5 border-b flex items-center gap-2.5" style={{ borderColor: "rgba(200,149,42,0.2)" }}>
-                <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white" style={{ background: "#C8952A" }}>
+              <div className="px-5 py-3.5 border-b flex items-center gap-2.5" style={{ borderColor: "rgba(10,10,10,0.85)" }}>
+                <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white" style={{ background: "#0a0a0a" }}>
                   {pendingUsers.length}
                 </div>
                 <div>
-                  <h3 className="font-bold text-sm" style={{ color: "#1a1612" }}>Solicitudes de acceso pendientes</h3>
+                  <h3 className="font-bold text-sm" style={{ color: "#0a0a0a" }}>Solicitudes de acceso pendientes</h3>
                   <p className="text-xs" style={{ color: "rgba(0,0,0,0.4)" }}>Revisa y aprueba o rechaza cada solicitud</p>
                 </div>
               </div>
 
-              <div className="divide-y" style={{ borderColor: "rgba(200,149,42,0.12)" }}>
+              <div className="divide-y" style={{ borderColor: "rgba(10,10,10,0.85)" }}>
                 {pendingUsers.map((user: any) => (
                   <div key={user.id} className="px-5 py-3.5 flex items-center gap-3">
                     <Avatar className="h-10 w-10 shrink-0">
-                      <AvatarFallback className="font-bold text-sm" style={{ background: "rgba(200,149,42,0.12)", color: "#C8952A" }}>
+                      <AvatarFallback className="font-bold text-sm" style={{ background: "rgba(10,10,10,0.85)", color: "#0a0a0a" }}>
                         {user.name.charAt(0).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1 min-w-0">
-                      <p className="font-bold text-sm text-[#1a1612] truncate">{user.name}</p>
-                      <p className="text-xs text-[#1a1612]/40 truncate">{user.email}</p>
+                      <p className="font-bold text-sm text-[#0a0a0a] truncate">{user.name}</p>
+                      <p className="text-xs text-[#0a0a0a]/40 truncate">{user.email}</p>
                       <div className="flex items-center gap-1.5 mt-1">
                         <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
-                          style={{ background: `${ROLE_COLORS[user.role] ?? "#C8952A"}15`, color: ROLE_COLORS[user.role] ?? "#C8952A", border: `1px solid ${ROLE_COLORS[user.role] ?? "#C8952A"}25` }}>
+                          style={{ background: `${ROLE_COLORS[user.role] ?? "#0a0a0a"}15`, color: ROLE_COLORS[user.role] ?? "#0a0a0a", border: `1px solid ${ROLE_COLORS[user.role] ?? "#0a0a0a"}25` }}>
                           {ROLE_LABELS[user.role] ?? user.role}
                         </span>
                         {user.company && (
-                          <span className="text-[10px] text-[#1a1612]/35">{user.company}</span>
+                          <span className="text-[10px] text-[#0a0a0a]/35">{user.company}</span>
                         )}
                       </div>
                     </div>
@@ -277,7 +277,7 @@ export default function Usuarios() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {activeUsers.map((user: any, i: number) => {
-              const color = ROLE_COLORS[user.role] ?? "#C8952A";
+              const color = ROLE_COLORS[user.role] ?? "#0a0a0a";
               const isRejected = user.approvalStatus === "rejected";
               return (
                 <motion.div key={user.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
@@ -330,7 +330,7 @@ export default function Usuarios() {
                         else toast({ variant: "destructive", title: "Error", description: r.error });
                       }}
                       title="Enviar correo de recuperación de contraseña"
-                      className="w-8 h-8 rounded-lg flex items-center justify-center text-foreground/30 hover:text-amber-600 hover:bg-amber-50 transition-all">
+                      className="w-8 h-8 rounded-lg flex items-center justify-center text-foreground/30 hover:text-neutral-800 hover:bg-neutral-50 transition-all">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-3.5 h-3.5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                       </svg>
@@ -461,7 +461,7 @@ export default function Usuarios() {
                     <Button type="button" variant="outline" onClick={close}
                       className="flex-1 rounded-xl border-black/10">Cancelar</Button>
                     <Button type="submit" disabled={submitting} className="flex-1 rounded-xl font-bold"
-                      style={{ background: "#C8952A", color: "#fff" }}>
+                      style={{ background: "#0a0a0a", color: "#fff" }}>
                       {submitting ? "Guardando..." : modal.mode === "create" ? "Crear Usuario" : "Guardar Cambios"}
                     </Button>
                   </div>
@@ -642,7 +642,7 @@ function AddWorkerNoEmailModal({
               </button>
               <button onClick={onSubmit} disabled={busy}
                 className="flex-1 py-2.5 rounded-xl text-sm font-bold text-white disabled:opacity-50"
-                style={{ background: "#C8952A" }}
+                style={{ background: "#0a0a0a" }}
                 data-testid="button-submit-worker">
                 {busy ? "Creando..." : "Crear"}
               </button>
@@ -711,14 +711,14 @@ function CredentialsShareView({
         <p className="text-sm text-gray-500 mt-1">{result.name}</p>
       </div>
 
-      <div className="rounded-2xl p-4 space-y-2 text-center" style={{ background: "#1a1612" }}>
-        <p className="text-[10px] uppercase tracking-widest font-bold text-amber-300">
+      <div className="rounded-2xl p-4 space-y-2 text-center" style={{ background: "#0a0a0a" }}>
+        <p className="text-[10px] uppercase tracking-widest font-bold text-neutral-300">
           Código de trabajador
         </p>
         <p className="text-3xl font-mono font-black text-white tracking-[0.15em]">
           {result.workerCode}
         </p>
-        <p className="text-[10px] uppercase tracking-widest font-bold text-amber-300 mt-3">
+        <p className="text-[10px] uppercase tracking-widest font-bold text-neutral-300 mt-3">
           PIN inicial
         </p>
         <p className="text-4xl font-mono font-black text-white tracking-[0.5em]">
@@ -754,7 +754,7 @@ function CredentialsShareView({
         </button>
         <button onClick={onPdf} disabled={pdfBusy}
           className="flex items-center gap-3 w-full px-4 py-3 rounded-xl font-bold text-white disabled:opacity-50"
-          style={{ background: "#C8952A" }}
+          style={{ background: "#0a0a0a" }}
           data-testid="button-share-pdf">
           <span className="text-xl">🖨️</span>
           <span className="flex-1 text-left">
@@ -763,13 +763,13 @@ function CredentialsShareView({
         </button>
       </div>
 
-      <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-3">
+      <p className="text-xs text-neutral-900 bg-neutral-50 border border-neutral-200 rounded-lg p-3">
         El PIN solo se ve una vez. El trabajador deberá cambiarlo en su primer login — si lo pierde antes, puedes resetearlo desde su detalle.
       </p>
 
       <button onClick={onClose}
         className="w-full py-3 rounded-xl font-bold text-white"
-        style={{ background: "#1a1612" }}
+        style={{ background: "#0a0a0a" }}
         data-testid="button-credentials-done">
         Listo
       </button>

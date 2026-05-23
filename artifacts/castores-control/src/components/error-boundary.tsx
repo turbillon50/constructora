@@ -45,7 +45,7 @@ export class ErrorBoundary extends Component<GlobalProps, GlobalState> {
           alignItems: "center",
           justifyContent: "center",
           padding: "24px",
-          background: "#f8f4ef",
+          background: "#fafafa",
           fontFamily:
             "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
         }}
@@ -65,21 +65,21 @@ export class ErrorBoundary extends Component<GlobalProps, GlobalState> {
             style={{
               fontSize: 22,
               fontWeight: 800,
-              color: "#1a1612",
+              color: "#0a0a0a",
               marginBottom: 8,
             }}
           >
             Algo salió mal al renderizar esta pantalla
           </h1>
-          <p style={{ fontSize: 14, color: "#5b5146", marginBottom: 16 }}>
+          <p style={{ fontSize: 14, color: "#525252", marginBottom: 16 }}>
             La app capturó un error en cliente. Comparte el detalle con el
             equipo técnico:
           </p>
           <pre
             style={{
               fontSize: 12,
-              color: "#1a1612",
-              background: "#f8f4ef",
+              color: "#0a0a0a",
+              background: "#fafafa",
               border: "1px solid #e7dccc",
               borderRadius: 10,
               padding: 14,
@@ -107,8 +107,8 @@ export class ErrorBoundary extends Component<GlobalProps, GlobalState> {
               style={{
                 padding: "10px 16px",
                 borderRadius: 10,
-                border: "1px solid #C8952A",
-                background: "#C8952A",
+                border: "1px solid #0a0a0a",
+                background: "#0a0a0a",
                 color: "#fff",
                 fontWeight: 700,
                 fontSize: 13,
@@ -127,7 +127,7 @@ export class ErrorBoundary extends Component<GlobalProps, GlobalState> {
                 borderRadius: 10,
                 border: "1px solid #d6c7ad",
                 background: "#fff",
-                color: "#1a1612",
+                color: "#0a0a0a",
                 fontWeight: 700,
                 fontSize: 13,
                 cursor: "pointer",
@@ -147,7 +147,7 @@ export class ErrorBoundary extends Component<GlobalProps, GlobalState> {
                 borderRadius: 10,
                 border: "1px solid #d6c7ad",
                 background: "#fff",
-                color: "#1a1612",
+                color: "#0a0a0a",
                 fontWeight: 700,
                 fontSize: 13,
                 cursor: "pointer",
@@ -204,17 +204,17 @@ export class TabErrorBoundary extends Component<TabProps, TabState> {
           }}
         >
           <div className="text-4xl mb-2">⚠️</div>
-          <h3 className="font-bold text-base mb-1" style={{ color: "#1a1612" }}>
+          <h3 className="font-bold text-base mb-1" style={{ color: "#0a0a0a" }}>
             Esta sección tuvo un error
           </h3>
-          <p className="text-xs mb-3" style={{ color: "rgba(26,22,18,0.55)" }}>
+          <p className="text-xs mb-3" style={{ color: "rgba(10,10,10,0.85)" }}>
             {this.state.error.message ||
               "Ocurrió un problema cargando esta pestaña."}
           </p>
           <button
             onClick={this.reset}
             className="px-4 py-2 rounded-xl font-bold text-sm text-white"
-            style={{ background: "linear-gradient(135deg, #C8952A, #E8A830)" }}
+            style={{ background: "linear-gradient(135deg, #0a0a0a, #E8A830)" }}
           >
             Reintentar
           </button>

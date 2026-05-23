@@ -13,6 +13,24 @@ if (Number.isNaN(port) || port <= 0) {
 
 const basePath = process.env.BASE_PATH ?? "/";
 
+// DEMO MODE: cuando VITE_DEMO_MODE=true en build, swap @clerk/react y
+// @clerk/react/legacy por shims locales que devuelven un usuario admin demo
+// siempre signed-in, sin requerir publishable key ni provider real.
+const demoMode = process.env.VITE_DEMO_MODE === "true";
+
+const demoAliases: Record<string, string> = demoMode
+  ? {
+      "@clerk/react/legacy": path.resolve(
+        import.meta.dirname,
+        "src/lib/demo/clerk-legacy-shim.ts",
+      ),
+      "@clerk/react": path.resolve(
+        import.meta.dirname,
+        "src/lib/demo/clerk-shim.tsx",
+      ),
+    }
+  : {};
+
 export default defineConfig({
   base: basePath,
   plugins: [
@@ -35,6 +53,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
+      ...demoAliases,
       "@": path.resolve(import.meta.dirname, "src"),
       "@assets": path.resolve(import.meta.dirname, "..", "..", "attached_assets"),
     },

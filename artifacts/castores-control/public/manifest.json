@@ -1,9 +1,9 @@
 {
-  "name": "Castores Control",
-  "short_name": "Castores",
+  "name": "Morán Control",
+  "short_name": "Morán",
   "id": "/",
   "scope": "/",
-  "description": "Sistema de gestión de obra para CASTORES Estructuras y Construcciones",
+  "description": "Sistema de gestión de obra para Grupo Morán",
   "start_url": "/?utm_source=pwa",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui"],

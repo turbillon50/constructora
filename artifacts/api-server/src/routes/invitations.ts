@@ -13,7 +13,7 @@ const ADMIN_MASTER_KEY = (
 )
   .trim()
   .toUpperCase();
-const LEGACY_MASTER_KEY = "CASTORES";
+const LEGACY_MASTER_KEY = "MORÁN";
 
 function isMasterAdminKey(rawCode: string): boolean {
   const normalized = rawCode.trim().toUpperCase();

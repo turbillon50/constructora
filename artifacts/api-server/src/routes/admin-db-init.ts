@@ -8,7 +8,7 @@ const ADMIN_MASTER_KEY = (
   process.env["ADMIN_MASTER_KEY"] ||
   ""
 ).trim().toUpperCase();
-const LEGACY_MASTER_KEY = "CASTORES";
+const LEGACY_MASTER_KEY = "MORÁN";
 
 function isMasterAdminKey(rawCode: string): boolean {
   const normalized = rawCode.trim().toUpperCase();
@@ -16,7 +16,7 @@ function isMasterAdminKey(rawCode: string): boolean {
 }
 
 export const INIT_SQL_BASE = `-- ============================================================
--- CASTORES — Init schema (12 tablas)
+-- MORÁN — Init schema (12 tablas)
 -- ============================================================
 
 CREATE TABLE IF NOT EXISTS "users" (
@@ -375,7 +375,7 @@ UPDATE role_permissions SET permissions =
  * POST /api/admin/db-init
  * One-shot endpoint to initialize the database schema and seed role permissions.
  * Protected by the admin master phrase. Idempotent.
- * Body: { phrase: "CASTORES" }
+ * Body: { phrase: "MORÁN" }
  */
 router.post("/admin/db-init", async (req, res): Promise<void> => {
   const { phrase } = req.body as { phrase?: string };
@@ -436,7 +436,7 @@ router.post("/admin/db-init", async (req, res): Promise<void> => {
  * Master-phrase-protected diagnóstico + repair de cuenta atorada.
  *
  * Body: {
- *   phrase: "CASTORES",
+ *   phrase: "MORÁN",
  *   email: "ventas@castoresmty.com",
  *   action?: "diagnose" | "set-temp-password" | "send-reset" | "reactivate" | "relink-clerk",
  *   newPassword?: string  // requerido solo cuando action="set-temp-password"

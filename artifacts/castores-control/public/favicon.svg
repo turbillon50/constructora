@@ -1,3 +1,9 @@
-<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="180" height="180" rx="36" fill="#FF3C00"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <circle cx="32" cy="32" r="30" fill="#000"/>
+  <!-- 3 hexágonos apilados -->
+  <g fill="#fff" stroke="#000" stroke-width="0.5">
+    <polygon points="32,15 50,23 32,31 14,23"/>
+    <polygon points="32,25 50,33 32,41 14,33"/>
+    <polygon points="32,35 50,43 32,51 14,43"/>
+  </g>
 </svg>

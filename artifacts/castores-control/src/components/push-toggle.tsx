@@ -149,7 +149,7 @@ export function PushToggle() {
   return (
     <section className="bg-card border border-border rounded-2xl p-6 space-y-3">
       <div className="flex items-start gap-3">
-        <span className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-lg font-bold">🔔</span>
+        <span className="w-10 h-10 rounded-xl bg-neutral-100 text-neutral-900 flex items-center justify-center text-lg font-bold">🔔</span>
         <div className="flex-1 min-w-0">
           <h3 className="font-bebas text-xl tracking-wide">NOTIFICACIONES</h3>
           <p className="text-xs text-muted-foreground mt-0.5">
@@ -172,10 +172,10 @@ export function PushToggle() {
         <div className="text-sm text-muted-foreground space-y-2">
           <p className="font-medium text-foreground">Para iPhone/iPad necesitamos un paso extra:</p>
           <ol className="list-decimal list-inside space-y-1">
-            <li>Abre Safari y ve a <span className="font-mono">castores.info</span>.</li>
+            <li>Abre Safari y ve a <span className="font-mono">moran.demo</span>.</li>
             <li>Toca el botón <strong>Compartir</strong> (cuadrado con flecha hacia arriba).</li>
             <li>Elige <strong>Añadir a pantalla de inicio</strong>.</li>
-            <li>Abre Castores desde el ícono de la pantalla de inicio.</li>
+            <li>Abre Morán desde el ícono de la pantalla de inicio.</li>
             <li>Vuelve a esta pantalla y activa las notificaciones.</li>
           </ol>
         </div>
@@ -185,7 +185,7 @@ export function PushToggle() {
         <div className="text-sm text-red-700 space-y-1">
           <p className="font-medium">Las notificaciones están bloqueadas.</p>
           <p className="text-muted-foreground">
-            Ve a los ajustes del navegador (o del sistema en iOS), busca <em>Castores</em> y activa las notificaciones.
+            Ve a los ajustes del navegador (o del sistema en iOS), busca <em>Morán</em> y activa las notificaciones.
           </p>
         </div>
       )}
@@ -205,7 +205,7 @@ export function PushToggle() {
                 "px-4 py-2 rounded-xl font-semibold text-sm transition disabled:opacity-50 " +
                 (state.subscribed
                   ? "border border-border bg-background hover:bg-accent"
-                  : "bg-amber-600 hover:bg-amber-700 text-white")
+                  : "bg-neutral-800 hover:bg-neutral-900 text-white")
               }
             >
               {busy ? "..." : state.subscribed ? "Desactivar" : "Activar"}

@@ -33,8 +33,8 @@ export function MainLayout({ children, publicAccess = false }: MainLayoutProps) 
             style={{ paddingTop: "env(safe-area-inset-top)" }}>
             <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
               <a href={import.meta.env.BASE_URL} className="flex items-center gap-2">
-                <img src={`${import.meta.env.BASE_URL}castores-logo.jpeg`} alt="Castores" className="h-8 w-8 rounded-lg object-cover" />
-                <span className="font-bebas tracking-wider text-lg">CASTORES CONTROL</span>
+                <img src={`${import.meta.env.BASE_URL}brand-logo.jpeg`} alt="Morán" className="h-8 w-8 rounded-lg object-cover" />
+                <span className="font-bebas tracking-wider text-lg">MORÁN CONTROL</span>
               </a>
               <a href={import.meta.env.BASE_URL} className="text-sm text-muted-foreground hover:text-foreground">Iniciar sesión →</a>
             </div>

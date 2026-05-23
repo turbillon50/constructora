@@ -58,10 +58,14 @@ function RouteFallback() {
   );
 }
 
+const demoMode = import.meta.env.VITE_DEMO_MODE === "true";
 const clerkPubKey =
   import.meta.env.VITE_CLERK_PUBLISHABLE_KEY ||
   import.meta.env.CLERK_PUBLISHABLE_KEY ||
-  import.meta.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+  import.meta.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ||
+  // En demo mode no hay Clerk real, pero ClerkProvider está stubeado vía
+  // vite alias (lib/demo/clerk-shim) y nunca llega a usar esta key.
+  (demoMode ? "demo_pk_unused" : undefined);
 const clerkProxyUrl = import.meta.env.VITE_CLERK_PROXY_URL;
 const resolvedClerkProxyUrl =
   typeof clerkProxyUrl === "string" && clerkProxyUrl.trim().length > 0
@@ -1643,7 +1647,8 @@ function Router() {
       {/* Public routes */}
       <Route path="/invite/:code" component={InvitePage} />
       <Route path="/api/invite/:code" component={InvitePage} />
-      <Route path="/" component={Login} />
+      {/* En demo mode no hay login: la raíz redirige directo al dashboard. */}
+      <Route path="/">{() => (demoMode ? <Redirect to="/dashboard" /> : <Login />)}</Route>
       <Route path="/explorar" component={Explorar} />
       <Route path="/sign-in/*?" component={SignInPage} />
       <Route path="/sign-up/*?" component={SignUpPage} />

@@ -1,13 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "corepack pnpm install --frozen-lockfile",
-  "buildCommand": "corepack pnpm --filter @workspace/api-server run build && corepack pnpm --filter @workspace/castores-control run build",
+  "buildCommand": "corepack pnpm --filter @workspace/castores-control run build",
   "outputDirectory": "artifacts/castores-control/dist/public",
-  "functions": {
-    "api/index.mjs": {
-      "maxDuration": 60
-    }
-  },
   "headers": [
     {
       "source": "/assets/(.*)",
@@ -17,8 +12,6 @@
     }
   ],
   "rewrites": [
-    { "source": "/api", "destination": "/api/index" },
-    { "source": "/api/:path*", "destination": "/api/index" },
-    { "source": "/((?!api).*)", "destination": "/index.html" }
+    { "source": "/((?!assets/|brand-logo\\.jpeg|favicon\\.svg|icon-192\\.png|icon-512\\.png|opengraph\\.jpg|manifest\\.json|sw\\.js|login-bg\\.png|project-[0-9]+\\.png).*)", "destination": "/index.html" }
   ]
 }

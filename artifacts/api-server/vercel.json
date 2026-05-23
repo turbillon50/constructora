@@ -1,7 +1,12 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "cd ../.. && corepack pnpm install --frozen-lockfile",
-  "buildCommand": "cd ../.. && corepack pnpm --filter @workspace/api-server run typecheck",
+  "buildCommand": "cd ../.. && corepack pnpm --filter @workspace/api-server run build",
+  "functions": {
+    "api/index.mjs": {
+      "maxDuration": 60
+    }
+  },
   "rewrites": [
     { "source": "/(.*)", "destination": "/api" }
   ]
